@@ -1,0 +1,15 @@
+[versions]
+kotlin = "1.9.24"
+
+[libraries]
+jcabiAspects = { module = "com.jcabi:jcabi-aspects", version = "0.26.0" }
+
+# plugins
+postCompileWeaving-plugin = { module = "io.freefair.aspectj.post-compile-weaving:io.freefair.aspectj.post-compile-weaving.gradle.plugin", version = "9.1.0" }
+
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+plugin-publish = { id = "com.gradle.plugin-publish", version = "2.0.0" }
+buildconfig = { id = "com.github.gmazzo.buildconfig", version = "6.0.6" }
+spotless = { id = "com.diffplug.spotless", version = "7.2.1" }
