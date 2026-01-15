@@ -1,4 +1,4 @@
-include("common-lib", "jcabi-gradle-plugin")
+include("jcabi-gradle-plugin")
 
 pluginManagement {
     repositories {
