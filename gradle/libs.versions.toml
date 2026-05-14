@@ -1,15 +1,59 @@
 [versions]
-kotlin = "1.9.24"
+gradle = "9.1.0"
+java = "21"
+kotlin = "2.2.21"
+# Spring
+spring-boot = "3.4.9"
+spring-cloud = "2024.0.2"
+netflix-dgs = "10.1.2"
+git-properties-plugin = "2.5.4"
+
+# third party libs
+mapstruct = "1.6.3"
+mapstruct-spring = "2.0.0"
+
+dema-jcabi-plugin = "0.0.2"
+
+# Test
+assertk = "0.28.1"
+kotest = "6.1.1"
+springMockk = "4.0.2"
+awaitility-kotlin = "4.2.0"
+junit = "5.11.4"
 
 [libraries]
+# BOMs
+cloud-dependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "spring-cloud" }
+netflix-dgs-dependencies = { module = "com.netflix.graphql.dgs:graphql-dgs-platform-dependencies", version.ref = "netflix-dgs" }
+
+# Map Struct related
+mapstruct-core = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
+mapstruct-spring-annotations = { module = "org.mapstruct.extensions.spring:mapstruct-spring-annotations", version.ref = "mapstruct-spring" }
+mapstruct-spring-extensions = { module = "org.mapstruct.extensions.spring:mapstruct-spring-extensions", version.ref = "mapstruct-spring" }
+
+# third party libs
 jcabiAspects = { module = "com.jcabi:jcabi-aspects", version = "0.26.0" }
 
-# plugins
-postCompileWeaving-plugin = { module = "io.freefair.aspectj.post-compile-weaving:io.freefair.aspectj.post-compile-weaving.gradle.plugin", version = "9.1.0" }
-
+# Test libs
+junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+spring-boot-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+assertk = { module = "com.willowtreeapps.assertk:assertk-jvm", version.ref = "assertk" }
+kotest = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+springmock = { module = "com.ninja-squad:springmockk", version.ref = "springMockk" }
+awaitility = { module = "org.awaitility:awaitility-kotlin", version.ref = "awaitility-kotlin" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+netflix-dgsCodegen = { id = "com.netflix.dgs.codegen", version = "8.5.0" }
+git-properties = { id = "com.gorylenko.gradle-git-properties", version.ref = "git-properties-plugin" }
+dema-jcabi = { id = "io.github.denis-markushin.jcabi-gradle-plugin", version.ref = "dema-jcabi-plugin" }
+postCompileWeaving = { id = "io.freefair.aspectj.post-compile-weaving", version = "9.1.0" }
 plugin-publish = { id = "com.gradle.plugin-publish", version = "2.0.0" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version = "6.0.6" }
 spotless = { id = "com.diffplug.spotless", version = "7.2.1" }
+vercraft = { id = "com.akuleshov7.vercraft.plugin-gradle", version = "0.8.0" }
+vanniktechMavenPublish = { id = "com.vanniktech.maven.publish", version = "0.36.0" }
