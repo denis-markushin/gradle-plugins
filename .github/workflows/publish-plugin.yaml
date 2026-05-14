@@ -17,8 +17,15 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '21'
       - name: Cache Gradle Caches
         uses: gradle/actions/setup-gradle@v5
       - name: Publish on Plugin Portal
         run: ./gradlew publishPlugins
         if: success()
+        env:
+          VERCRAFT_BRANCH: ${{ github.ref_name }}
