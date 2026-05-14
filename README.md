@@ -25,3 +25,13 @@ the [Gradle Plugin Portal](https://plugins.gradle.org/u/denis-markushin).
 - [kotlin-library](build-logic/kotlin-library/README.md) — Convention plugin for Kotlin library projects
 - [spotless](build-logic/spotless/README.md) — Spotless code formatting convention plugin
 - [jcabi-gradle-plugin](build-logic/jcabi-gradle-plugin/README.md) — jcabi-aspects AspectJ weaving plugin
+
+## Cutting a release
+
+Releases are cut from the GitHub **Actions** tab using one of three manual workflows:
+
+- **Release MAJOR** / **Release MINOR** — run from the `master` branch.
+- **Release PATCH** — run from a `release/*` branch.
+
+Each workflow runs the vercraft `makeRelease` task, which creates the release branch/tag and pushes it. The
+tag push triggers `publish-plugin.yaml`, which publishes the plugin to the Gradle Plugin Portal.

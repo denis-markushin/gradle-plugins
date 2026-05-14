@@ -1,0 +1,11 @@
+name: Release PATCH
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    uses: ./.github/workflows/_release.yml
+    with:
+      releaseType: PATCH
+    secrets: inherit
