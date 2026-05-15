@@ -39,8 +39,10 @@ internal fun Project.configureSpotless() {
         }
     }
 
-    tasks.matching { it.name == "assemble" }.configureEach {
-        dependsOn(tasks.named("spotlessInstallGitPrePushHook"))
+    plugins.withId("base") {
+        tasks.named("assemble") {
+            dependsOn(tasks.named("spotlessInstallGitPrePushHook"))
+        }
     }
     tasks.named("spotlessInstallGitPrePushHook").configure {
         onlyIf { !rootProject.file(".git/hooks/pre-push").exists() }
