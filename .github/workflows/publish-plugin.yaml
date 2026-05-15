@@ -24,8 +24,14 @@ jobs:
           java-version: '21'
       - name: Cache Gradle Caches
         uses: gradle/actions/setup-gradle@v5
+      - name: Resolve release branch from tag
+        id: vercraft
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          echo "branch=release/${VERSION}" >> "$GITHUB_OUTPUT"
       - name: Publish on Plugin Portal
         run: ./gradlew publishPlugins
         if: success()
         env:
-          VERCRAFT_BRANCH: ${{ github.ref_name }}
+          VERCRAFT_BRANCH: ${{ steps.vercraft.outputs.branch }}
