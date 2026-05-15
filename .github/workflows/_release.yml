@@ -17,6 +17,7 @@ permissions:
 jobs:
   make-release:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Validate branch for release type
         shell: bash
@@ -68,5 +69,4 @@ jobs:
       - name: Make release
         env:
           RELEASE_TYPE: ${{ inputs.releaseType }}
-          VERCRAFT_BRANCH: ${{ github.ref_name }}
         run: ./gradlew -p build-logic makeRelease -PreleaseType="$RELEASE_TYPE"
