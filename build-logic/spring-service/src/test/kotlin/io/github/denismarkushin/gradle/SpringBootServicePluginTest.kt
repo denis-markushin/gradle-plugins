@@ -129,9 +129,28 @@ class SpringBootServicePluginTest {
         }
 
         @Test
-        fun `plugin excludes mockito`() {
-            val testImpl = project.configurations.getByName("testImplementation")
-            assertThat(testImpl.excludeRules.any { it.group == "org.mockito" }).isTrue()
+        fun `plugin excludes mockito only from test configurations`() {
+            val guaranteedTestConfigs = listOf("testImplementation", "testRuntimeOnly")
+            val optionalTestConfigs = listOf("testCompileOnly", "testRuntimeClasspath", "testCompileClasspath")
+            val nonTestConfigs = listOf("implementation", "runtimeClasspath", "compileClasspath")
+
+            assertAll {
+                guaranteedTestConfigs.forEach { name ->
+                    val cfg = project.configurations.getByName(name)
+                    assertThat(cfg.excludeRules.any { it.group == "org.mockito" })
+                        .isTrue()
+                }
+                optionalTestConfigs.forEach { name ->
+                    val cfg = project.configurations.findByName(name) ?: return@forEach
+                    assertThat(cfg.excludeRules.any { it.group == "org.mockito" })
+                        .isTrue()
+                }
+                nonTestConfigs.forEach { name ->
+                    val cfg = project.configurations.findByName(name) ?: return@forEach
+                    assertThat(cfg.excludeRules.any { it.group == "org.mockito" })
+                        .isFalse()
+                }
+            }
         }
 
         @Test
