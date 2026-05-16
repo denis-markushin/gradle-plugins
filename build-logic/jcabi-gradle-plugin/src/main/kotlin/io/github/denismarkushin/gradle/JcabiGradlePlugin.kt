@@ -2,6 +2,7 @@ package io.github.denismarkushin.gradle
 
 import io.freefair.gradle.plugins.aspectj.AjcAction
 import io.freefair.gradle.plugins.aspectj.AspectJPostCompileWeavingPlugin
+import io.github.denismarkushin.gradle.jcabi.VersionCatalog
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

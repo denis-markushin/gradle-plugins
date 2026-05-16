@@ -2,8 +2,8 @@ package io.github.denismarkushin.gradle.configurator
 
 import com.netflix.graphql.dgs.codegen.gradle.CodegenPlugin
 import com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask
-import io.github.denismarkushin.gradle.VersionCatalog.NETFLIX_DGS_BOM_DEP
 import io.github.denismarkushin.gradle.extension.DemaPlatformExtension
+import io.github.denismarkushin.gradle.springservice.VersionCatalog.NETFLIX_DGS_BOM_DEP
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.getByType

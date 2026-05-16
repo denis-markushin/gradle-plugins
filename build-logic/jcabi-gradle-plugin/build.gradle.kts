@@ -4,7 +4,7 @@ plugins {
 
 buildConfig {
     className("VersionCatalog")
-    packageName(project.group.toString().replace("-", ""))
+    packageName("io.github.denismarkushin.gradle.jcabi")
     useKotlinOutput { internalVisibility = true }
 
     buildConfigField("JCABI_ASPECTS_DEP", libs.jcabiAspects.get().toString())

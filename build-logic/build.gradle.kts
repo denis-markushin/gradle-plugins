@@ -1,9 +1,22 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `kotlin-dsl` apply false
     alias(libs.plugins.plugin.publish) apply false
     alias(libs.plugins.vercraft)
+    alias(libs.plugins.ben.manes.versions)
+}
+
+tasks.withType<DependencyUpdatesTask>().configureEach {
+    rejectVersionIf {
+        val unstableKeywords = listOf("alpha", "beta", "rc", "m", "preview", "snapshot", "eap", "dev")
+        val candidateLower = candidate.version.lowercase()
+        unstableKeywords.any { kw -> candidateLower.contains(kw) } &&
+            !currentVersion.lowercase().let { cur -> unstableKeywords.any { cur.contains(it) } }
+    }
+    checkConstraints = true
+    gradleReleaseChannel = "current"
 }
 
 val javaVersion = libs.versions.java.get()

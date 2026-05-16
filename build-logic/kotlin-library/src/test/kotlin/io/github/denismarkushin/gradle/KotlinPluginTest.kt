@@ -3,6 +3,7 @@ package io.github.denismarkushin.gradle
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
+import io.github.denismarkushin.gradle.kotlinlibrary.VersionCatalog
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.Test
