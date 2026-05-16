@@ -5,7 +5,7 @@ import io.github.denismarkushin.gradle.configurator.configureRepositories
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-open class KotlinPlugin : Plugin<Project> {
+class KotlinPlugin : Plugin<Project> {
 
     override fun apply(target: Project): Unit = with(target) {
         plugins.apply("org.jetbrains.kotlin.jvm")
