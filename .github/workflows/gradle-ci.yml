@@ -68,5 +68,3 @@ jobs:
 
       - name: Submit dependency graph
         uses: gradle/actions/dependency-submission@v5
-        with:
-          build-root-directory: build-logic
