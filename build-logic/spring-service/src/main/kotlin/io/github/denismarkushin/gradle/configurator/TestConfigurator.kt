@@ -1,6 +1,6 @@
 package io.github.denismarkushin.gradle.configurator
 
-import io.github.denismarkushin.gradle.VersionCatalog
+import io.github.denismarkushin.gradle.springservice.VersionCatalog
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat

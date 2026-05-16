@@ -1,7 +1,7 @@
 package io.github.denismarkushin.gradle.configurator
 
-import io.github.denismarkushin.gradle.VersionCatalog.SPRING_CLOUD_BOM_DEP
 import io.github.denismarkushin.gradle.extension.DemaPlatformExtension
+import io.github.denismarkushin.gradle.springservice.VersionCatalog.SPRING_CLOUD_BOM_DEP
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
 

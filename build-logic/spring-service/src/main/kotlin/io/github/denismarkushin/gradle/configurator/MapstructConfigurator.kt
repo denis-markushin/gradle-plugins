@@ -1,7 +1,7 @@
 package io.github.denismarkushin.gradle.configurator
 
-import io.github.denismarkushin.gradle.VersionCatalog
 import io.github.denismarkushin.gradle.extension.DemaPlatformExtension
+import io.github.denismarkushin.gradle.springservice.VersionCatalog
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType

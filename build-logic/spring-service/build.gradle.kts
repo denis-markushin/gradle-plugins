@@ -6,7 +6,7 @@ val javaVersion = libs.versions.java.get()
 
 buildConfig {
     className("VersionCatalog")
-    packageName(project.group.toString().replace("-", ""))
+    packageName("io.github.denismarkushin.gradle.springservice")
     buildConfigField("JAVA_VERSION", javaVersion.toInt())
     // Spring
     buildConfigField("SPRING_CLOUD_BOM_DEP", libs.cloud.dependencies.get().toString())
