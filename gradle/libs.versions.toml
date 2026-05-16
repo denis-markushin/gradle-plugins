@@ -57,3 +57,4 @@ buildconfig = { id = "com.github.gmazzo.buildconfig", version = "6.0.6" }
 spotless = { id = "com.diffplug.spotless", version = "7.2.1" }
 vercraft = { id = "com.akuleshov7.vercraft.plugin-gradle", version = "0.8.0" }
 vanniktechMavenPublish = { id = "com.vanniktech.maven.publish", version = "0.36.0" }
+ben-manes-versions = { id = "com.github.ben-manes.versions", version = "0.52.0" }
