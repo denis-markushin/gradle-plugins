@@ -25,7 +25,7 @@ internal fun Project.configureTestTask() {
     dependencies.add("testImplementation", VersionCatalog.KOTEST_DEP)
     dependencies.add("testImplementation", VersionCatalog.AWAITILITY_DEP)
 
-    configurations.all {
+    configurations.matching { it.name.startsWith("test") }.configureEach {
         exclude(group = "org.mockito")
     }
 }

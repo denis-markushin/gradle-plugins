@@ -5,7 +5,7 @@ import org.gradle.kotlin.dsl.repositories
 
 internal fun Project.configureRepositories() {
     repositories {
-        mavenCentral()
         mavenLocal()
+        mavenCentral()
     }
 }
