@@ -4,7 +4,7 @@ plugins {
 
 buildConfig {
     className("VersionCatalog")
-    packageName(project.group.toString().replace("-", ""))
+    packageName("io.github.denismarkushin.gradle.springservice")
     // Spring
     buildConfigField("SPRING_CLOUD_BOM_DEP", libs.cloud.dependencies.get().toString())
     buildConfigField("NETFLIX_DGS_BOM_DEP", libs.netflix.dgs.dependencies.get().toString())

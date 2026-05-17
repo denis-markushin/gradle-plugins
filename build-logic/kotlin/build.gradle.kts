@@ -6,7 +6,7 @@ val javaVersion = libs.versions.java.get()
 
 buildConfig {
     className("VersionCatalog")
-    packageName(project.group.toString().replace("-", ""))
+    packageName("io.github.denismarkushin.gradle.kotlinlibrary")
     buildConfigField("JAVA_VERSION", javaVersion.toInt())
 }
 

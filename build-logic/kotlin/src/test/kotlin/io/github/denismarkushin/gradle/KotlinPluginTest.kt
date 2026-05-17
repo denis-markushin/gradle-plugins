@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
+import io.github.denismarkushin.gradle.kotlinlibrary.VersionCatalog
 import org.gradle.api.JavaVersion
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.testfixtures.ProjectBuilder
