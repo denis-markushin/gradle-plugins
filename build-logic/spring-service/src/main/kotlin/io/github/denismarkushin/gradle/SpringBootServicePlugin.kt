@@ -5,7 +5,6 @@ import io.github.denismarkushin.gradle.configurator.configureJcabi
 import io.github.denismarkushin.gradle.configurator.configureKapt
 import io.github.denismarkushin.gradle.configurator.configureMapstruct
 import io.github.denismarkushin.gradle.configurator.configureNetflixDgsFramework
-import io.github.denismarkushin.gradle.configurator.configureSpotless
 import io.github.denismarkushin.gradle.configurator.configureSpringBootBuildInfo
 import io.github.denismarkushin.gradle.configurator.configureSpringBootRequiredDependencies
 import io.github.denismarkushin.gradle.configurator.configureSpringCloudDependencies
@@ -29,6 +28,7 @@ class SpringBootServicePlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         plugins.apply(VercraftPlugin::class)
         plugins.apply(KotlinPlugin::class)
+        plugins.apply(SpotlessPlugin::class)
         plugins.apply("org.jetbrains.kotlin.plugin.spring")
         plugins.apply("org.springframework.boot")
 
@@ -41,12 +41,11 @@ class SpringBootServicePlugin : Plugin<Project> {
         configureTestTask()
         configureKapt()
         configureMapstruct() // depends on configureKapt()
-        configureSpotless()
         configureJcabi()
         configureProcessResourcesTokenFiltering()
 
         bootstrapFile(DOCKERIGNORE_RESOURCE, ".dockerignore")
-        bootstrapFile(DOCKERFILE_RESOURCE, "Dockerfile.build-image")
+        bootstrapFile(DOCKERFILE_RESOURCE, "Dockerfile")
         bootstrapFile(SERVICE_GITLAB_CI_RESOURCE, ".gitlab-ci.yml")
 
         // disable *-sources.jar and *-plain.jar

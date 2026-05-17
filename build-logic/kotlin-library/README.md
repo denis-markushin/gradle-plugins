@@ -9,12 +9,11 @@ A lightweight convention plugin for reusable Kotlin library projects.
 
 ## What it configures
 
-| Area             | Details                                                                                                            |
-|------------------|--------------------------------------------------------------------------------------------------------------------|
-| **Kotlin**       | JVM toolchain (Java 21), `-Xjsr305=strict`, `-Xemit-jvm-type-annotations`, `allWarningsAsErrors`, `javaParameters` |
-| **Java**         | `java-library` plugin applied; `-sources.jar` and `-javadoc.jar` artifacts produced                                |
-| **Publishing**   | `maven-publish` applied; `mavenJava` publication created from the `java` component                                 |
-| **Repositories** | Standard repositories configured                                                                                   |
+| Area                | Details                                                                                                                                             |
+|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Kotlin baseline** | JVM toolchain, compiler args, and repositories are inherited from [`io.github.denis-markushin.kotlin`](../kotlin/README.md) (applied automatically) |
+| **Java**            | `java-library` plugin applied; `-sources.jar` and `-javadoc.jar` artifacts produced                                                                 |
+| **Publishing**      | `maven-publish` applied; `mavenJava` publication created from the `java` component                                                                  |
 
 ---
 

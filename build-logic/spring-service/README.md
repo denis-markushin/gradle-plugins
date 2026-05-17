@@ -11,7 +11,7 @@ An opinionated convention plugin for production-ready Spring Boot microservices.
 
 | Area                   | Details                                                                                                                                                                                         |
 |------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Kotlin**             | JVM toolchain (Java 21), `-Xjsr305=strict`, `-Xemit-jvm-type-annotations`, `allWarningsAsErrors`, `javaParameters`                                                                              |
+| **Kotlin baseline**    | JVM toolchain, compiler args, and repositories are inherited from [`io.github.denis-markushin.kotlin`](../kotlin/README.md) (applied automatically) |
 | **Spring Boot**        | `spring-boot` + `kotlin.plugin.spring` applied; Spring Boot BOM imported into all dependency configurations; `spring-boot-devtools` and `spring-boot-docker-compose` added to `developmentOnly` |
 | **Build info**         | `spring-boot-gradle-plugin` build info task configured so `management.info.build.*` is populated at runtime                                                                                     |
 | **Resource filtering** | `processResources` substitutes `@project.*@` tokens from `rootProject.properties` into `*.yml`, `*.yaml`, and `*.properties` files                                                              |

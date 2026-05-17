@@ -7,7 +7,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
 private const val EDITORCONFIG_RESOURCE = "/org/dema/.editorconfig"
-private const val GITATTRIBUTES_RESOURCE = "/org/dema/.gitattributes"
+private const val GITATTRIBUTES_RESOURCE = "/org/dema/gitattributes"
 
 /**
  * Applies the Spotless plugin and configures ktlint for Kotlin sources.

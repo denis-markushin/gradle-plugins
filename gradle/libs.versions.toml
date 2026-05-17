@@ -12,8 +12,6 @@ git-properties-plugin = "2.5.4"
 mapstruct = "1.6.3"
 mapstruct-spring = "2.0.0"
 
-dema-jcabi-plugin = "0.0.2"
-
 # Test
 assertk = "0.28.1"
 kotest = "6.1.1"
@@ -50,7 +48,6 @@ kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotl
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 netflix-dgsCodegen = { id = "com.netflix.dgs.codegen", version = "8.5.0" }
 git-properties = { id = "com.gorylenko.gradle-git-properties", version.ref = "git-properties-plugin" }
-dema-jcabi = { id = "io.github.denis-markushin.jcabi-gradle-plugin", version.ref = "dema-jcabi-plugin" }
 postCompileWeaving = { id = "io.freefair.aspectj.post-compile-weaving", version = "9.1.0" }
 plugin-publish = { id = "com.gradle.plugin-publish", version = "2.0.0" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version = "6.0.6" }

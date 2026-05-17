@@ -21,7 +21,8 @@ dependencyResolutionManagement {
 
 include(
     "jcabi-gradle-plugin",
-    "spotless",
+    "kotlin",
     "kotlin-library",
+    "spotless",
     "spring-service",
 )
