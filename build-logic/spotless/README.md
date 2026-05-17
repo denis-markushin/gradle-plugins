@@ -3,7 +3,8 @@
 [![Build](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml/badge.svg)](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml)
 [![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/io.github.denis-markushin.spotless?label=spotless)](https://plugins.gradle.org/plugin/io.github.denis-markushin.spotless)
 
-A standalone Spotless convention plugin. Apply it at the root project level of a multi-module build when you need Spotless formatting without pulling in the full `spring-service` or `kotlin-library` plugins.
+A standalone Spotless convention plugin. Apply it at the root project level of a multi-module build when you need Spotless formatting
+without pulling in the full `spring-service` or `kotlin-library` plugins.
 
 ---
 

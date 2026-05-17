@@ -7,13 +7,13 @@ the [Gradle Plugin Portal](https://plugins.gradle.org/u/denis-markushin).
 
 ## Plugins
 
-| Plugin ID                                                                                    | Module                                                           | Description                                                      |
-|----------------------------------------------------------------------------------------------|------------------------------------------------------------------|------------------------------------------------------------------|
-| [`io.github.denis-markushin.spring-service`](build-logic/spring-service/README.md)           | [spring-service](build-logic/spring-service/README.md)           | Convention plugin for production-ready Spring Boot microservices |
-| [`io.github.denis-markushin.kotlin-library`](build-logic/kotlin-library/README.md)           | [kotlin-library](build-logic/kotlin-library/README.md)           | Convention plugin for Kotlin library projects                    |
+| Plugin ID                                                                                    | Module                                                           | Description                                                                    |
+|----------------------------------------------------------------------------------------------|------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| [`io.github.denis-markushin.spring-service`](build-logic/spring-service/README.md)           | [spring-service](build-logic/spring-service/README.md)           | Convention plugin for production-ready Spring Boot microservices               |
+| [`io.github.denis-markushin.kotlin-library`](build-logic/kotlin-library/README.md)           | [kotlin-library](build-logic/kotlin-library/README.md)           | Convention plugin for Kotlin library projects                                  |
 | [`io.github.denis-markushin.kotlin`](build-logic/kotlin/README.md)                           | [kotlin](build-logic/kotlin/README.md)                           | Foundational Kotlin convention plugin (toolchain, compiler args, repositories) |
-| [`io.github.denis-markushin.spotless`](build-logic/spotless/README.md)                       | [spotless](build-logic/spotless/README.md)                       | Spotless code formatting convention plugin                       |
-| [`io.github.denis-markushin.jcabi-gradle-plugin`](build-logic/jcabi-gradle-plugin/README.md) | [jcabi-gradle-plugin](build-logic/jcabi-gradle-plugin/README.md) | Wires jcabi-aspects AspectJ post-compile weaving into your build |
+| [`io.github.denis-markushin.spotless`](build-logic/spotless/README.md)                       | [spotless](build-logic/spotless/README.md)                       | Spotless code formatting convention plugin                                     |
+| [`io.github.denis-markushin.jcabi-gradle-plugin`](build-logic/jcabi-gradle-plugin/README.md) | [jcabi-gradle-plugin](build-logic/jcabi-gradle-plugin/README.md) | Wires jcabi-aspects AspectJ post-compile weaving into your build               |
 
 ## Requirements
 

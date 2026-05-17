@@ -3,7 +3,8 @@
 [![Build](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml/badge.svg)](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml)
 [![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/io.github.denis-markushin.spring-service?label=spring-service)](https://plugins.gradle.org/plugin/io.github.denis-markushin.spring-service)
 
-An opinionated convention plugin for production-ready Spring Boot microservices. Applying it is equivalent to wiring together a curated set of plugins and dependencies that would otherwise require boilerplate configuration in every service.
+An opinionated convention plugin for production-ready Spring Boot microservices. Applying it is equivalent to wiring together a curated set
+of plugins and dependencies that would otherwise require boilerplate configuration in every service.
 
 ---
 
@@ -11,7 +12,7 @@ An opinionated convention plugin for production-ready Spring Boot microservices.
 
 | Area                   | Details                                                                                                                                                                                         |
 |------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Kotlin baseline**    | JVM toolchain, compiler args, and repositories are inherited from [`io.github.denis-markushin.kotlin`](../kotlin/README.md) (applied automatically) |
+| **Kotlin baseline**    | JVM toolchain, compiler args, and repositories are inherited from [`io.github.denis-markushin.kotlin`](../kotlin/README.md) (applied automatically)                                             |
 | **Spring Boot**        | `spring-boot` + `kotlin.plugin.spring` applied; Spring Boot BOM imported into all dependency configurations; `spring-boot-devtools` and `spring-boot-docker-compose` added to `developmentOnly` |
 | **Build info**         | `spring-boot-gradle-plugin` build info task configured so `management.info.build.*` is populated at runtime                                                                                     |
 | **Resource filtering** | `processResources` substitutes `@project.*@` tokens from `rootProject.properties` into `*.yml`, `*.yaml`, and `*.properties` files                                                              |

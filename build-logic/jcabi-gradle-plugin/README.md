@@ -21,13 +21,13 @@ the required dependencies automatically.
 
 ```kotlin
 plugins {
-    id("io.github.denis-markushin.jcabi-gradle-plugin") version "x.x.x"
+  id("io.github.denis-markushin.jcabi-gradle-plugin") version "x.x.x"
 }
 ```
 
 ```groovy
 plugins {
-    id 'io.github.denis-markushin.jcabi-gradle-plugin' version 'x.x.x'
+  id 'io.github.denis-markushin.jcabi-gradle-plugin' version 'x.x.x'
 }
 ```
 
@@ -43,7 +43,7 @@ on the `aspect` configuration to override the default:
 
 ```kotlin
 dependencies {
-    aspect("com.jcabi:jcabi-aspects:0.27.0")
+  aspect("com.jcabi:jcabi-aspects:0.27.0")
 }
 ```
 
