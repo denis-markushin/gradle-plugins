@@ -1,17 +1,5 @@
-plugins {
-    alias(libs.plugins.buildconfig)
-}
-
-val javaVersion = libs.versions.java.get()
-
-buildConfig {
-    className("VersionCatalog")
-    packageName(project.group.toString().replace("-", ""))
-    buildConfigField("JAVA_VERSION", javaVersion.toInt())
-}
-
 dependencies {
-    implementation(plugin(libs.plugins.kotlin.jvm))
+    implementation(project(":kotlin"))
     implementation(plugin(libs.plugins.kotlin.spring))
     implementation(plugin(libs.plugins.vanniktechMavenPublish))
 }

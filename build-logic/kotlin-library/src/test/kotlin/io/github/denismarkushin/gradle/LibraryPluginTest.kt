@@ -19,6 +19,12 @@ class LibraryPluginTest {
     }
 
     @Test
+    fun `plugin applies kotlin-spring plugin`() {
+        val project = buildProject()
+        assertThat(project.plugins.hasPlugin("org.jetbrains.kotlin.plugin.spring")).isTrue()
+    }
+
+    @Test
     fun `plugin applies java-library plugin`() {
         val project = buildProject()
         assertThat(project.plugins.hasPlugin("java-library")).isTrue()

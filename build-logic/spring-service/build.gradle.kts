@@ -2,12 +2,9 @@ plugins {
     alias(libs.plugins.buildconfig)
 }
 
-val javaVersion = libs.versions.java.get()
-
 buildConfig {
     className("VersionCatalog")
     packageName(project.group.toString().replace("-", ""))
-    buildConfigField("JAVA_VERSION", javaVersion.toInt())
     // Spring
     buildConfigField("SPRING_CLOUD_BOM_DEP", libs.cloud.dependencies.get().toString())
     buildConfigField("NETFLIX_DGS_BOM_DEP", libs.netflix.dgs.dependencies.get().toString())
@@ -26,13 +23,13 @@ buildConfig {
 }
 
 dependencies {
-    implementation(plugin(libs.plugins.kotlin.jvm))
+    implementation(project(":kotlin"))
+    implementation(project(":spotless"))
+    implementation(project(":jcabi-gradle-plugin"))
     implementation(plugin(libs.plugins.kotlin.spring))
     implementation(plugin(libs.plugins.spring.boot))
     implementation(plugin(libs.plugins.git.properties))
-    implementation(plugin(libs.plugins.dema.jcabi))
     implementation(plugin(libs.plugins.vercraft))
-    implementation(plugin(libs.plugins.spotless))
     implementation(plugin(libs.plugins.netflix.dgsCodegen))
 }
 
