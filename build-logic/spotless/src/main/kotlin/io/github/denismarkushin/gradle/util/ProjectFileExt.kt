@@ -10,7 +10,7 @@ internal fun Project.bootstrapFile(resourcePath: String, fileName: String) {
     val stream = PluginResources::class.java.getResourceAsStream(resourcePath)
         ?: error("Plugin resource '$resourcePath' not found in JAR")
     target.parentFile?.mkdirs()
-    stream.use { it.copyTo(target.outputStream()) }
+    stream.use { input -> target.outputStream().use { output -> input.copyTo(output) } }
     logger.lifecycle(
         "[spotless-plugin] Bootstrapped $fileName → ${target.absolutePath}\n" +
             "  This file can be committed and customized. It will not be overwritten.",
