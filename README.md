@@ -14,6 +14,7 @@ the [Gradle Plugin Portal](https://plugins.gradle.org/u/denis-markushin).
 | [`io.github.denis-markushin.kotlin`](build-logic/kotlin/README.md)                           | [kotlin](build-logic/kotlin/README.md)                           | Foundational Kotlin convention plugin (toolchain, compiler args, repositories) |
 | [`io.github.denis-markushin.spotless`](build-logic/spotless/README.md)                       | [spotless](build-logic/spotless/README.md)                       | Spotless code formatting convention plugin                                     |
 | [`io.github.denis-markushin.jcabi-gradle-plugin`](build-logic/jcabi-gradle-plugin/README.md) | [jcabi-gradle-plugin](build-logic/jcabi-gradle-plugin/README.md) | Wires jcabi-aspects AspectJ post-compile weaving into your build               |
+| [`io.github.denis-markushin.jooq-codegen`](build-logic/jooq-codegen-gradle-plugin/README.md) | [jooq-codegen](build-logic/jooq-codegen-gradle-plugin/README.md) | Generates jOOQ sources from a Liquibase changelog via Testcontainers           |
 
 ## Requirements
 
@@ -27,6 +28,7 @@ the [Gradle Plugin Portal](https://plugins.gradle.org/u/denis-markushin).
 - [kotlin](build-logic/kotlin/README.md) — Foundational Kotlin convention plugin (toolchain, compiler args, repositories)
 - [spotless](build-logic/spotless/README.md) — Spotless code formatting convention plugin
 - [jcabi-gradle-plugin](build-logic/jcabi-gradle-plugin/README.md) — jcabi-aspects AspectJ weaving plugin
+- [jooq-codegen](build-logic/jooq-codegen-gradle-plugin/README.md) — Generates jOOQ sources from a Liquibase changelog via Testcontainers
 
 ## Cutting a release
 

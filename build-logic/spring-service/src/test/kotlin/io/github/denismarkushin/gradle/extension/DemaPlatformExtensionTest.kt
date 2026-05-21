@@ -120,4 +120,11 @@ class DemaPlatformExtensionTest {
             assertThat(ext.useMapstruct.get()).isTrue()
         }
     }
+
+    @Test
+    fun `useJooq defaults to true`() {
+        val ext = createExtension()
+
+        assertThat(ext.useJooq.get()).isTrue()
+    }
 }

@@ -21,6 +21,13 @@ abstract class DemaPlatformExtension @Inject constructor(
     val useKapt: Property<Boolean> = objects.property<Boolean>().convention(true)
     val useJcabi: Property<Boolean> = objects.property<Boolean>().convention(true)
     val useMapstruct: Property<Boolean> = objects.property<Boolean>().convention(false)
+    val useJooq: Property<Boolean> = objects.property<Boolean>().convention(true)
+    val jooq: JooqHandler = objects.newInstance<JooqHandler>()
+
+    fun jooq(action: Action<JooqHandler>) {
+        action.execute(jooq)
+    }
+
     val spring: SpringHandler = objects.newInstance<SpringHandler>()
 
     fun spring(action: Action<SpringHandler>) {

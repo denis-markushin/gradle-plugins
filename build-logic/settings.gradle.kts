@@ -21,6 +21,7 @@ dependencyResolutionManagement {
 
 include(
     "jcabi-gradle-plugin",
+    "jooq-codegen-gradle-plugin",
     "kotlin",
     "kotlin-library",
     "spotless",

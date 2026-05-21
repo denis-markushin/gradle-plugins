@@ -206,6 +206,17 @@ class SpringBootServicePluginTest {
         fun `jcabi plugin applied when useJcabi is true`() {
             assertThat(project.plugins.hasPlugin(JcabiGradlePlugin::class.java)).isTrue()
         }
+
+        @Test
+        fun `plugin applies the jooq codegen plugin`() {
+            val p = ProjectBuilder.builder()
+                .withProjectDir(projectDir)
+                .build()
+            p.plugins.apply(SpringBootServicePlugin::class.java)
+            (p as org.gradle.api.internal.project.ProjectInternal).evaluate()
+            assertThat(p.plugins.hasPlugin(JooqCodegenPlugin::class.java))
+                .isTrue()
+        }
     }
 
     @Nested

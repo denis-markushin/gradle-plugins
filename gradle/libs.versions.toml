@@ -11,6 +11,8 @@ git-properties-plugin = "2.5.4"
 # third party libs
 mapstruct = "1.6.3"
 mapstruct-spring = "2.0.0"
+jooq = "3.19.24"
+dema-libs = "0.3.0"
 
 # Test
 assertk = "0.28.1"
@@ -32,6 +34,8 @@ mapstruct-spring-extensions = { module = "org.mapstruct.extensions.spring:mapstr
 
 # third party libs
 jcabiAspects = { module = "com.jcabi:jcabi-aspects", version = "0.26.0" }
+jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "jooq" }
+dema-jooq-liquibase-tc = { module = "io.github.denis-markushin:jooq-liquibase-testcontainer", version.ref = "dema-libs" }
 
 # Test libs
 junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
@@ -52,6 +56,7 @@ postCompileWeaving = { id = "io.freefair.aspectj.post-compile-weaving", version 
 plugin-publish = { id = "com.gradle.plugin-publish", version = "2.0.0" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version = "6.0.6" }
 spotless = { id = "com.diffplug.spotless", version = "7.2.1" }
+jooq-codegen = { id = "org.jooq.jooq-codegen-gradle", version.ref = "jooq" }
 vercraft = { id = "com.akuleshov7.vercraft.plugin-gradle", version = "0.8.0" }
 vanniktechMavenPublish = { id = "com.vanniktech.maven.publish", version = "0.36.0" }
 ben-manes-versions = { id = "com.github.ben-manes.versions", version = "0.52.0" }

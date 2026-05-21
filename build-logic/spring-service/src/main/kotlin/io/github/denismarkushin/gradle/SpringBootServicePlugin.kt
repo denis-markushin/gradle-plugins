@@ -2,6 +2,7 @@ package io.github.denismarkushin.gradle
 
 import com.akuleshov7.vercraft.VercraftPlugin
 import io.github.denismarkushin.gradle.configurator.configureJcabi
+import io.github.denismarkushin.gradle.configurator.configureJooq
 import io.github.denismarkushin.gradle.configurator.configureKapt
 import io.github.denismarkushin.gradle.configurator.configureMapstruct
 import io.github.denismarkushin.gradle.configurator.configureNetflixDgsFramework
@@ -41,6 +42,7 @@ class SpringBootServicePlugin : Plugin<Project> {
         configureTestTask()
         configureKapt()
         configureMapstruct() // depends on configureKapt()
+        configureJooq()
         configureJcabi()
         configureProcessResourcesTokenFiltering()
 
