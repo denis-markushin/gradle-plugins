@@ -7,6 +7,7 @@ import assertk.assertions.doesNotContain
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import assertk.assertions.isTrue
 import io.github.denismarkushin.gradle.extension.DemaPlatformExtension
 import org.gradle.api.Project
@@ -172,6 +173,40 @@ class SpringBootServicePluginTest {
         fun `netflix dgs BOM not added when useNetflixDgs is false`() {
             val implDeps = project.configurations.getByName("implementation").dependencies
             assertThat(implDeps.any { it.name == "graphql-dgs-platform-dependencies" }).isFalse()
+        }
+
+        @Test
+        fun `dgsCodegen wiring adds dema starter and scalars when useNetflixDgs is true`() {
+            val p = buildProjectWithExtension {
+                spring {
+                    netflixDgs {
+                        useNetflixDgs.set(true)
+                    }
+                }
+            }
+
+            val dgsCodegen = p.configurations.findByName("dgsCodegen")
+            assertThat(dgsCodegen).isNotNull()
+
+            val deps = dgsCodegen!!.allDependencies.map { "${it.group}:${it.name}" }
+            assertAll {
+                assertThat(deps).contains("io.github.denis-markushin:graphql-dgs-starter")
+                assertThat(deps).contains("io.github.denis-markushin:common-scalars-starter")
+            }
+        }
+
+        @Test
+        fun `dgsCodegen wiring is absent when useNetflixDgs is false`() {
+            val p = buildProjectWithExtension {
+                spring {
+                    netflixDgs {
+                        useNetflixDgs.set(false)
+                    }
+                }
+            }
+
+            val dgsCodegen = p.configurations.findByName("dgsCodegen")
+            assertThat(dgsCodegen).isNull()
         }
 
         @Test
