@@ -10,18 +10,19 @@ of plugins and dependencies that would otherwise require boilerplate configurati
 
 ## What it configures
 
-| Area                   | Details                                                                                                                                                                                         |
-|------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Kotlin baseline**    | JVM toolchain, compiler args, and repositories are inherited from [`io.github.denis-markushin.kotlin`](../kotlin/README.md) (applied automatically)                                             |
-| **Spring Boot**        | `spring-boot` + `kotlin.plugin.spring` applied; Spring Boot BOM imported into all dependency configurations; `spring-boot-devtools` and `spring-boot-docker-compose` added to `developmentOnly` |
-| **Build info**         | `spring-boot-gradle-plugin` build info task configured so `management.info.build.*` is populated at runtime                                                                                     |
-| **Resource filtering** | `processResources` substitutes `@project.*@` tokens from `rootProject.properties` into `*.yml`, `*.yaml`, and `*.properties` files                                                              |
-| **Testing**            | JUnit Platform enabled; `spring-boot-test`, `assertk`, `spring-mockk`, `kotest`, `awaitility` added; Mockito excluded globally                                                                  |
-| **MapStruct**          | Optional — enabled via `platform.useMapstruct = true`; adds `mapstruct-core`, `mapstruct-spring-annotations`, and kapt processors with Spring component model                                   |
-| **jcabi-aspects**      | Optional — enabled by default; can be disabled via `platform.useJcabi = false`                                                                                                                  |
-| **Spotless**           | ktlint applied to all `*.kt` and `*.gradle.kts` sources; `.editorconfig` and `.gitattributes` bootstrapped into the root project if absent; pre-push Git hook installed                         |
-| **Versioning**         | [Vercraft](https://github.com/akuleshov7/vercraft) plugin applied for semantic versioning from Git tags                                                                                         |
-| **Scaffold files**     | `Dockerfile.build-image`, `.dockerignore`, and `.gitlab-ci.yml` are written to the project root if absent                                                                                       |
+| Area                   | Details                                                                                                                                                                                                                                                                                                                                                  |
+|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Kotlin baseline**    | JVM toolchain, compiler args, and repositories are inherited from [`io.github.denis-markushin.kotlin`](../kotlin/README.md) (applied automatically)                                                                                                                                                                                                      |
+| **Spring Boot**        | `spring-boot` + `kotlin.plugin.spring` applied; Spring Boot BOM imported into all dependency configurations; `spring-boot-devtools` and `spring-boot-docker-compose` added to `developmentOnly`                                                                                                                                                          |
+| **Build info**         | `spring-boot-gradle-plugin` build info task configured so `management.info.build.*` is populated at runtime                                                                                                                                                                                                                                              |
+| **Resource filtering** | `processResources` substitutes `@project.*@` tokens from `rootProject.properties` into `*.yml`, `*.yaml`, and `*.properties` files                                                                                                                                                                                                                       |
+| **Testing**            | JUnit Platform enabled; `spring-boot-test`, `assertk`, `spring-mockk`, `kotest`, `awaitility` added; Mockito excluded globally                                                                                                                                                                                                                           |
+| **MapStruct**          | Optional — enabled via `platform.useMapstruct = true`; adds `mapstruct-core`, `mapstruct-spring-annotations`, and kapt processors with Spring component model                                                                                                                                                                                            |
+| **Netflix DGS**        | Optional — enabled via `platform.spring.netflixDgs.useNetflixDgs = true`; imports DGS BOM, applies `com.netflix.dgs.codegen`, configures `GenerateJavaTask`, and auto-wires `graphql-dgs-starter` + `common-scalars-starter` into the `dgsCodegen` configuration so shared schema types (PageInfo, Node, MutationResult, scalars) are visible to codegen |
+| **jcabi-aspects**      | Optional — enabled by default; can be disabled via `platform.useJcabi = false`                                                                                                                                                                                                                                                                           |
+| **Spotless**           | ktlint applied to all `*.kt` and `*.gradle.kts` sources; `.editorconfig` and `.gitattributes` bootstrapped into the root project if absent; pre-push Git hook installed                                                                                                                                                                                  |
+| **Versioning**         | [Vercraft](https://github.com/akuleshov7/vercraft) plugin applied for semantic versioning from Git tags                                                                                                                                                                                                                                                  |
+| **Scaffold files**     | `Dockerfile.build-image`, `.dockerignore`, and `.gitlab-ci.yml` are written to the project root if absent                                                                                                                                                                                                                                                |
 
 ---
 
@@ -66,7 +67,9 @@ platform {
     useCloud = false    // default: false — import Spring Cloud BOM
 
     netflixDgs {
-      useNetflixDgs = false   // default: false — import Netflix DGS BOM and apply codegen plugin
+      useNetflixDgs = false   // default: false — import Netflix DGS BOM, apply codegen plugin,
+                              // and auto-wire dema `graphql-dgs-starter` + `common-scalars-starter`
+                              // into the `dgsCodegen` configuration
 
       generator {
         // All fields below are true/enabled by default when useNetflixDgs = true
