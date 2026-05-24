@@ -13,6 +13,9 @@ buildConfig {
     buildConfigField("MAPSTRUCT_PROCESSOR_DEP", libs.mapstruct.processor.get().toString())
     buildConfigField("MAPSTRUCT_SPRING_ANNOTATIONS_DEP", libs.mapstruct.spring.annotations.get().toString())
     buildConfigField("MAPSTRUCT_SPRING_EXTENSIONS_DEP", libs.mapstruct.spring.extensions.get().toString())
+    // Dema
+    buildConfigField("DEMA_GRAPHQL_STARTER_DEP", libs.dema.graphql.starter.get().toString())
+    buildConfigField("DEMA_GRAPHQL_SCALARS_DEP", libs.dema.graphql.scalars.get().toString())
     // Testing
     buildConfigField("JUNIT_LAUNCHER_DEP", libs.junit.launcher.get().toString())
     buildConfigField("SPRING_BOOT_TEST_DEP", libs.spring.boot.test.get().toString())
