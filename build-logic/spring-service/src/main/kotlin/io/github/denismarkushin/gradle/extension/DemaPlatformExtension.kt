@@ -60,6 +60,23 @@ abstract class NetflixDgsHandler @Inject constructor(
 abstract class DgsGeneratorHandler @Inject constructor(
     objects: ObjectFactory,
 ) {
+    companion object {
+        private val DEFAULT_TYPE_MAPPINGS = mapOf(
+            "UUID" to "java.util.UUID",
+            "Generated" to "jakarta.annotation.Generated",
+            "LocalDateTime" to "java.time.LocalDateTime",
+            "Upload" to "org.springframework.web.multipart.MultipartFile",
+            "ErrorInterface" to "org.dema.graphql.dgs.error.ErrorInterface",
+            "NotFoundError" to "org.dema.graphql.dgs.error.NotFoundError",
+            "ValidationError" to "org.dema.graphql.dgs.error.ValidationError",
+            "ConflictError" to "org.dema.graphql.dgs.error.ConflictError",
+            "UnauthorizedError" to "org.dema.graphql.dgs.error.UnauthorizedError",
+            "ForbiddenError" to "org.dema.graphql.dgs.error.ForbiddenError",
+            "ServiceUnavailableError" to "org.dema.graphql.dgs.error.ServiceUnavailableError",
+            "RuntimeError" to "org.dema.graphql.dgs.error.RuntimeError",
+        )
+    }
+
     val generateDocs = objects.property<Boolean>().convention(true)
     val generateClient = objects.property<Boolean>().convention(true)
     val generateBoxedTypes = objects.property<Boolean>().convention(true)
@@ -67,13 +84,5 @@ abstract class DgsGeneratorHandler @Inject constructor(
     val addGeneratedAnnotation = objects.property<Boolean>().convention(true)
     val generateKotlinNullableClasses = objects.property<Boolean>().convention(true)
     val generateKotlinClosureProjections = objects.property<Boolean>().convention(true)
-    val typeMapping = objects.mapProperty<String, String>()
-        .convention(
-            mutableMapOf(
-                "UUID" to "java.util.UUID",
-                "Generated" to "jakarta.annotation.Generated",
-                "LocalDateTime" to "java.time.LocalDateTime",
-                "Upload" to "org.springframework.web.multipart.MultipartFile",
-            ),
-        )
+    val typeMapping = objects.mapProperty<String, String>().apply { putAll(DEFAULT_TYPE_MAPPINGS) }
 }
