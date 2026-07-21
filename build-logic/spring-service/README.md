@@ -10,19 +10,20 @@ of plugins and dependencies that would otherwise require boilerplate configurati
 
 ## What it configures
 
-| Area                   | Details                                                                                                                                                                                                                                                                                                                                                  |
-|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Kotlin baseline**    | JVM toolchain, compiler args, and repositories are inherited from [`io.github.denis-markushin.kotlin`](../kotlin/README.md) (applied automatically)                                                                                                                                                                                                      |
-| **Spring Boot**        | `spring-boot` + `kotlin.plugin.spring` applied; Spring Boot BOM imported into all dependency configurations; `spring-boot-devtools` and `spring-boot-docker-compose` added to `developmentOnly`                                                                                                                                                          |
-| **Build info**         | `spring-boot-gradle-plugin` build info task configured so `management.info.build.*` is populated at runtime                                                                                                                                                                                                                                              |
-| **Resource filtering** | `processResources` substitutes `@project.*@` tokens from `rootProject.properties` into `*.yml`, `*.yaml`, and `*.properties` files                                                                                                                                                                                                                       |
-| **Testing**            | JUnit Platform enabled; `spring-boot-test`, `assertk`, `spring-mockk`, `kotest`, `awaitility` added; Mockito excluded globally                                                                                                                                                                                                                           |
-| **MapStruct**          | Optional — enabled via `platform.useMapstruct = true`; adds `mapstruct-core`, `mapstruct-spring-annotations`, and kapt processors with Spring component model                                                                                                                                                                                            |
-| **Netflix DGS**        | Optional — enabled via `platform.spring.netflixDgs.useNetflixDgs = true`; imports DGS BOM, applies `com.netflix.dgs.codegen`, configures `GenerateJavaTask`, and auto-wires `graphql-dgs-starter` + `common-scalars-starter` into the `dgsCodegen` configuration so shared schema types (PageInfo, Node, MutationResult, scalars) are visible to codegen |
-| **jcabi-aspects**      | Optional — enabled by default; can be disabled via `platform.useJcabi = false`                                                                                                                                                                                                                                                                           |
-| **Spotless**           | ktlint applied to all `*.kt` and `*.gradle.kts` sources; `.editorconfig` and `.gitattributes` bootstrapped into the root project if absent; pre-push Git hook installed                                                                                                                                                                                  |
-| **Versioning**         | [Vercraft](https://github.com/akuleshov7/vercraft) plugin applied for semantic versioning from Git tags                                                                                                                                                                                                                                                  |
-| **Scaffold files**     | `Dockerfile.build-image`, `.dockerignore`, and `.gitlab-ci.yml` are written to the project root if absent                                                                                                                                                                                                                                                |
+| Area                   | Details                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Kotlin baseline**    | JVM toolchain, compiler args, and repositories are inherited from [`io.github.denis-markushin.kotlin`](../kotlin/README.md) (applied automatically)                                                                                                                                                                                                                                                                                                                                                                                            |
+| **Spring Boot**        | `spring-boot` + `kotlin.plugin.spring` applied; Spring Boot BOM imported into all dependency configurations; `spring-boot-devtools` and `spring-boot-docker-compose` added to `developmentOnly`                                                                                                                                                                                                                                                                                                                                                |
+| **Build info**         | `spring-boot-gradle-plugin` build info task configured so `management.info.build.*` is populated at runtime                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| **Resource filtering** | `processResources` substitutes `@project.*@` tokens from `rootProject.properties` into `*.yml`, `*.yaml`, and `*.properties` files                                                                                                                                                                                                                                                                                                                                                                                                             |
+| **Testing**            | JUnit Platform enabled; `spring-boot-test`, `assertk`, `spring-mockk`, `kotest`, `awaitility` added; Mockito excluded globally                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **MapStruct**          | Optional — enabled via `platform.useMapstruct = true`; adds `mapstruct-core`, `mapstruct-spring-annotations`, and kapt processors with Spring component model                                                                                                                                                                                                                                                                                                                                                                                  |
+| **Netflix DGS**        | Optional — enabled via `platform.spring.netflixDgs.useNetflixDgs = true`; imports DGS BOM, applies `com.netflix.dgs.codegen`, configures `GenerateJavaTask`, and auto-wires `graphql-dgs-starter` + `common-scalars-starter` into the `dgsCodegen` configuration so shared schema types (PageInfo, Node, MutationResult, scalars) are visible to codegen. Default `typeMapping` also redirects the starter's `ErrorInterface` hierarchy to `org.dema.graphql.dgs.error.*`, so consumers get error-type codegen without duplicating the mapping |
+| **jOOQ codegen**       | Enabled by default; applies [`io.github.denis-markushin.jooq-codegen-gradle-plugin`](../jooq-codegen-gradle-plugin/README.md) and mirrors the `platform { jooq { } }` block into it. Disable codegen via `platform.useJooq = false`                                                                                                                                                                                                                                                                                                            |
+| **jcabi-aspects**      | Optional — enabled by default; can be disabled via `platform.useJcabi = false`                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **Spotless**           | ktlint applied to all `*.kt` and `*.gradle.kts` sources; `.editorconfig` and `.gitattributes` bootstrapped into the root project if absent; pre-push Git hook installed                                                                                                                                                                                                                                                                                                                                                                        |
+| **Versioning**         | [Vercraft](https://github.com/akuleshov7/vercraft) plugin applied for semantic versioning from Git tags                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| **Scaffold files**     | `Dockerfile.build-image`, `.dockerignore`, and `.gitlab-ci.yml` are written to the project root if absent                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 
 ---
 
@@ -62,6 +63,16 @@ platform {
   useKapt = true          // default: true  — apply kotlin-kapt
   useJcabi = true         // default: true  — wire jcabi-aspects weaving
   useMapstruct = false    // default: false — add MapStruct dependencies and kapt processors
+  useJooq = true          // default: true  — run jOOQ codegen via the jooq-codegen-gradle-plugin
+
+  jooq {
+    // all optional — fall back to the jooq-codegen-gradle-plugin conventions when unset
+    jooqVersion = "3.19.x"
+    databaseImage = "postgres:16-alpine"
+    configuration {
+      // org.jooq.codegen.gradle ConfigurationExtension — forced types, excludes, etc.
+    }
+  }
 
   spring {
     useCloud = false    // default: false — import Spring Cloud BOM
@@ -81,12 +92,21 @@ platform {
         generateKotlinNullableClasses = true
         generateKotlinClosureProjections = true
 
-        // Default type mappings (can be extended)
+        // Default type mappings (seeded automatically; can be extended)
         typeMapping = mapOf(
           "UUID" to "java.util.UUID",
           "Generated" to "jakarta.annotation.Generated",
           "LocalDateTime" to "java.time.LocalDateTime",
           "Upload" to "org.springframework.web.multipart.MultipartFile",
+          // graphql-dgs-starter ErrorInterface hierarchy — seeded by default
+          "ErrorInterface" to "org.dema.graphql.dgs.error.ErrorInterface",
+          "NotFoundError" to "org.dema.graphql.dgs.error.NotFoundError",
+          "ValidationError" to "org.dema.graphql.dgs.error.ValidationError",
+          "ConflictError" to "org.dema.graphql.dgs.error.ConflictError",
+          "UnauthorizedError" to "org.dema.graphql.dgs.error.UnauthorizedError",
+          "ForbiddenError" to "org.dema.graphql.dgs.error.ForbiddenError",
+          "ServiceUnavailableError" to "org.dema.graphql.dgs.error.ServiceUnavailableError",
+          "RuntimeError" to "org.dema.graphql.dgs.error.RuntimeError",
         )
       }
     }
