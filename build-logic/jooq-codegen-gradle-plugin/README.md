@@ -30,7 +30,8 @@ The generated package is derived from the project `group` with dashes stripped
 
 - A `java` (or `java-library`) plugin must be applied — the plugin wires generated sources into the
   Java source sets.
-- A Liquibase master changelog at `src/main/resources/liquibase/changelog-master.yml`.
+- A Liquibase master changelog at `src/main/resources/liquibase/changelog-master.yml` (override the
+  path via `changelogFile`).
 - Docker available on the build machine (Testcontainers starts a PostgreSQL container during codegen).
 
 ---
@@ -65,6 +66,7 @@ demaJooq {
   enabled = true                         // default: true  — master switch; when false, injects and configures nothing
   jooqVersion = "3.19.x"                 // default: bundled jOOQ version
   databaseImage = "postgresql:17.5-alpine" // default — Testcontainers image used to build the codegen JDBC URL
+  changelogFile = layout.projectDirectory.file("src/main/resources/liquibase/changelog-master.yml") // default
 
   // Optional override, deep-merged on top of the dema defaults
   configuration {

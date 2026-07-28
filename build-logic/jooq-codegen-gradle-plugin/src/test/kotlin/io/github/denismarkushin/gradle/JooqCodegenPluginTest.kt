@@ -115,6 +115,29 @@ class JooqCodegenPluginTest {
     }
 
     @Test
+    fun `consumer changelogFile overrides the default changelog path`() {
+        val project = project()
+        val changelog = project.layout.projectDirectory.file("db/custom-changelog.yml")
+        project.extensions.getByType(JooqCodegenExtension::class.java).changelogFile.set(changelog)
+        project.evaluate()
+
+        val value = resolvedConfiguration(project).generator.database.properties
+            .single { it.key == "liquibaseChangelogFile" }.value
+        assertThat(value).isEqualTo(changelog.asFile.absolutePath)
+    }
+
+    @Test
+    fun `codegen task tracks the changelog as an input file`() {
+        val project = project()
+        project.evaluate()
+
+        val task = project.tasks.named("jooqCodegen", JooqCodegenTask::class.java).get()
+        val changelog = project.layout.projectDirectory
+            .file("src/main/resources/liquibase/changelog-master.yml").asFile
+        assertThat(task.inputs.files.contains(changelog)).isTrue()
+    }
+
+    @Test
     fun `creates the jooq source set and leaves main untouched`() {
         val project = project()
         project.evaluate()
