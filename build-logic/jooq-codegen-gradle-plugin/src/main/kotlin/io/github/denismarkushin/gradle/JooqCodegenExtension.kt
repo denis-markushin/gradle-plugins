@@ -2,6 +2,7 @@ package io.github.denismarkushin.gradle
 
 import io.github.denismarkushin.gradle.jooq.VersionCatalog
 import org.gradle.api.Action
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.kotlin.dsl.property
@@ -31,6 +32,9 @@ abstract class JooqCodegenExtension @Inject constructor(
 
     /** Testcontainers database image used to build the codegen JDBC URL. */
     val databaseImage: Property<String> = objects.property<String>().convention("postgresql:17.5-alpine")
+
+    /** Liquibase master changelog driving codegen; defaults to `src/main/resources/liquibase/changelog-master.yml`. */
+    val changelogFile: RegularFileProperty = objects.fileProperty()
 
     /** Optional consumer override, layered on top of the dema defaults. */
     val configAction: Property<Action<ConfigurationExtension>> = objects.property()

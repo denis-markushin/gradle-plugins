@@ -69,6 +69,7 @@ platform {
     // all optional — fall back to the jooq-codegen-gradle-plugin conventions when unset
     jooqVersion = "3.19.x"
     databaseImage = "postgres:16-alpine"
+    changelogFile = layout.projectDirectory.file("src/main/resources/liquibase/changelog-master.yml")
     configuration {
       // org.jooq.codegen.gradle ConfigurationExtension — forced types, excludes, etc.
     }

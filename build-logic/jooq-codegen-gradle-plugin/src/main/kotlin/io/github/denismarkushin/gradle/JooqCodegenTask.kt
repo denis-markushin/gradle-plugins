@@ -3,11 +3,15 @@ package io.github.denismarkushin.gradle
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.jooq.codegen.GenerationTool
 import org.jooq.meta.jaxb.Configuration
@@ -25,6 +29,11 @@ abstract class JooqCodegenTask : DefaultTask() {
     /** The merged jOOQ configuration, marshalled to XML. */
     @get:Input
     abstract val configurationXml: Property<String>
+
+    /** Liquibase changelog; an input so codegen reruns on content change. Tracks the master only, not `include`d children. */
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val changelogFile: RegularFileProperty
 
     /** Classpath used to run the generator. */
     @get:Classpath

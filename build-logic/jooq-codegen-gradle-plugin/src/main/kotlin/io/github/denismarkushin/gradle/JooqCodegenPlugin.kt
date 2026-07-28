@@ -3,6 +3,8 @@ package io.github.denismarkushin.gradle
 import io.github.denismarkushin.gradle.jooq.VersionCatalog
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.RegularFile
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.get
@@ -21,6 +23,9 @@ abstract class JooqCodegenPlugin : Plugin<Project> {
             description = "Classpath for jOOQ code generation: JDBC driver, database provider, codegen extensions."
         }
         val ext = extensions.create(JooqCodegenExtension.NAME, JooqCodegenExtension::class.java)
+        ext.changelogFile.convention(
+            layout.projectDirectory.file("src/main/resources/liquibase/changelog-master.yml"),
+        )
 
         // JooqConfigurator sets enabled/databaseImage/jooqVersion/configAction via lazy providers,
         // so the platform { } block must finish evaluating before we read them — hence afterEvaluate.
@@ -29,7 +34,7 @@ abstract class JooqCodegenPlugin : Plugin<Project> {
             injectDependencies(ext)
             val outputDir = layout.buildDirectory.dir(GENERATED_DIR).get().asFile
             val configurationXml = MiniJAXB.marshal(buildConfiguration(ext, outputDir.absolutePath))
-            registerCodegenTask(configurationXml, outputDir)
+            registerCodegenTask(configurationXml, outputDir, ext.changelogFile)
             wireSourceSet(outputDir)
         }
     }
@@ -46,7 +51,7 @@ abstract class JooqCodegenPlugin : Plugin<Project> {
      * object would not work: jOOQ's `generator { }` DSL replaces rather than mutates.
      */
     private fun Project.buildConfiguration(ext: JooqCodegenExtension, targetDir: String): Configuration {
-        val changelogFile = "$projectDir/src/main/resources/liquibase/changelog-master.yml"
+        val changelogFile = ext.changelogFile.get().asFile.absolutePath
         val packageName = group.toString().replace("-", "")
 
         val defaults = objects.newInstance(ConfigurationExtension::class.java, objects)
@@ -66,11 +71,16 @@ abstract class JooqCodegenPlugin : Plugin<Project> {
     private fun copyOf(configuration: Configuration): Configuration =
         MiniJAXB.unmarshal(MiniJAXB.marshal(configuration), Configuration::class.java)
 
-    private fun Project.registerCodegenTask(configurationXml: String, outputDir: File) {
+    private fun Project.registerCodegenTask(
+        configurationXml: String,
+        outputDir: File,
+        changelog: Provider<RegularFile>,
+    ) {
         tasks.register<JooqCodegenTask>(CODEGEN_NAME) {
             group = "jooq"
             description = "Generates jOOQ sources from the Liquibase changelog."
             this.configurationXml.set(configurationXml)
+            changelogFile.set(changelog)
             codegenClasspath.from(configurations.getByName(CODEGEN_NAME))
             outputDirectory.fileValue(outputDir)
         }

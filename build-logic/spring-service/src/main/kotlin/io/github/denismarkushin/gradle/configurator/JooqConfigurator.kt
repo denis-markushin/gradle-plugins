@@ -27,6 +27,7 @@ internal fun Project.configureJooq() {
     jooqExt.enabled.set(platform.useJooq)
     jooqExt.jooqVersion.set(platform.jooq.jooqVersion.orElse(jooqExt.jooqVersion.get()))
     jooqExt.databaseImage.set(platform.jooq.databaseImage.orElse(jooqExt.databaseImage.get()))
+    jooqExt.changelogFile.set(platform.jooq.changelogFile.orElse(jooqExt.changelogFile.get()))
     // configAction has no fallback; an unset property means "no consumer override"
     jooqExt.configAction.set(platform.jooq.configAction)
 }
