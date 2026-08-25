@@ -27,7 +27,6 @@ internal fun Project.configureCompilation(
             freeCompilerArgs.addAll(
                 "-Xjsr305=strict", // Enables support for @Nullable and @Nonnull when using Java-based libraries
                 "-Xemit-jvm-type-annotations", // Support for new @Target annotations from JDK 1.8+ (e.g., List<@NotEmpty String>)
-                "-Xannotation-default-target=param-property", // Change defaulting rule for annotations (see KT-73255)
             )
             javaParameters.set(true) // Generates metadata for method parameter names
             allWarningsAsErrors.set(true)

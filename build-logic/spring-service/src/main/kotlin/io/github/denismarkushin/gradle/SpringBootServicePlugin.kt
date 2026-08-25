@@ -66,9 +66,13 @@ class SpringBootServicePlugin : Plugin<Project> {
      *   application:
      *     name: "@project.name@"
      * ```
+     *
+     * `Project.getProperties()` is deprecated and removed in Gradle 10, but no full-map replacement
+     * exists yet: `gradleProperty()` resolves a single key. Revisit on the Gradle 10 bump.
      */
     private fun Project.configureProcessResourcesTokenFiltering() {
         tasks.withType<ProcessResources> {
+            @Suppress("DEPRECATION")
             val substitutionTokens =
                 rootProject.properties
                     .map { (key, value) -> "project.$key" to (value?.toString() ?: "unknown") }
