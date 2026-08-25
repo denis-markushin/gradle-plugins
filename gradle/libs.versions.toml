@@ -1,25 +1,25 @@
 [versions]
-gradle = "9.1.0"
-java = "21"
-kotlin = "2.2.21"
+gradle = "9.7.1"
+java = "25"
+kotlin = "2.4.10"
 # Spring
-spring-boot = "3.4.9"
-spring-cloud = "2024.0.2"
-netflix-dgs = "10.1.2"
-git-properties-plugin = "2.5.4"
+spring-boot = "4.0.8"
+spring-cloud = "2025.1.3"
+netflix-dgs = "12.0.1"
+git-properties-plugin = "4.0.1"
 
 # third party libs
 mapstruct = "1.6.3"
 mapstruct-spring = "2.0.0"
-jooq = "3.19.24"
+jooq = "3.19.37"
 dema-libs = "0.4.0"
 
 # Test
 assertk = "0.28.1"
-kotest = "6.1.1"
-springMockk = "4.0.2"
-awaitility-kotlin = "4.2.0"
-junit = "5.11.4"
+kotest = "6.2.4"
+springMockk = "5.0.1"
+awaitility-kotlin = "4.3.0"
+junit = "6.1.3"
 
 [libraries]
 # BOMs
@@ -52,13 +52,13 @@ awaitility = { module = "org.awaitility:awaitility-kotlin", version.ref = "await
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
-netflix-dgsCodegen = { id = "com.netflix.dgs.codegen", version = "8.5.0" }
+netflix-dgsCodegen = { id = "com.netflix.dgs.codegen", version = "8.6.0" }
 git-properties = { id = "com.gorylenko.gradle-git-properties", version.ref = "git-properties-plugin" }
-postCompileWeaving = { id = "io.freefair.aspectj.post-compile-weaving", version = "9.1.0" }
-plugin-publish = { id = "com.gradle.plugin-publish", version = "2.0.0" }
-buildconfig = { id = "com.github.gmazzo.buildconfig", version = "6.0.6" }
-spotless = { id = "com.diffplug.spotless", version = "7.2.1" }
+postCompileWeaving = { id = "io.freefair.aspectj.post-compile-weaving", version = "9.5.0" }
+plugin-publish = { id = "com.gradle.plugin-publish", version = "2.1.1" }
+buildconfig = { id = "com.github.gmazzo.buildconfig", version = "6.0.10" }
+spotless = { id = "com.diffplug.spotless", version = "8.10.0" }
 jooq-codegen = { id = "org.jooq.jooq-codegen-gradle", version.ref = "jooq" }
 vercraft = { id = "com.akuleshov7.vercraft.plugin-gradle", version = "0.8.0" }
-vanniktechMavenPublish = { id = "com.vanniktech.maven.publish", version = "0.36.0" }
-ben-manes-versions = { id = "com.github.ben-manes.versions", version = "0.54.0" }
+vanniktechMavenPublish = { id = "com.vanniktech.maven.publish", version = "0.37.0" }
+ben-manes-versions = { id = "com.github.ben-manes.versions", version = "0.61.0" }

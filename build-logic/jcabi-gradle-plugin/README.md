@@ -8,8 +8,8 @@ the required dependencies automatically.
 
 ## Requirements
 
-- Java 21
-- Gradle 8+
+- Java 25 — the Gradle daemon itself must run on JDK 25 or newer
+- Gradle 9+
 
 ## What the plugin does
 

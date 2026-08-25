@@ -15,8 +15,8 @@ conventions.
 | Area              | Details                                                                                                                                           |
 |-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Kotlin plugin** | Applies `org.jetbrains.kotlin.jvm`                                                                                                                |
-| **Toolchain**     | JVM toolchain set to Java 21                                                                                                                      |
-| **Compiler args** | `-Xjsr305=strict`, `-Xemit-jvm-type-annotations`, `-Xannotation-default-target=param-property`, `javaParameters=true`, `allWarningsAsErrors=true` |
+| **Toolchain**     | JVM toolchain set to Java 25                                                                                                                      |
+| **Compiler args** | `-Xjsr305=strict`, `-Xemit-jvm-type-annotations`, `javaParameters=true`, `allWarningsAsErrors=true` |
 | **Repositories**  | `mavenLocal()`, `mavenCentral()` (in that order)                                                                                                  |
 
 ---

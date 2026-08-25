@@ -1,12 +1,12 @@
 # Stage: extract Spring Boot application layers from prebuilt jar
 # Run `./gradlew bootJar` on the host before `docker compose build`
-FROM eclipse-temurin:21-jre-alpine AS layers
+FROM eclipse-temurin:25-jre-alpine AS layers
 WORKDIR /application
 COPY build/libs/*.jar app.jar
 RUN java -Djarmode=tools -jar app.jar extract --layers --destination extracted
 
 # Stage: final runtime image
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 
 VOLUME /tmp
 

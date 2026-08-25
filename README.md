@@ -18,8 +18,8 @@ the [Gradle Plugin Portal](https://plugins.gradle.org/u/denis-markushin).
 
 ## Requirements
 
-- Java 21
-- Gradle 8+
+- Java 25 — the Gradle daemon itself must run on JDK 25 or newer
+- Gradle 9+
 
 ## Modules
 
