@@ -8,6 +8,7 @@ buildConfig {
     useKotlinOutput { internalVisibility = true }
 
     buildConfigField("JCABI_ASPECTS_DEP", libs.jcabiAspects.get().toString())
+    buildConfigField("ASPECTJ_RT_DEP", libs.aspectjrt.get().toString())
 }
 
 val testPlugins = configurations.create("testPlugins") {

@@ -60,7 +60,6 @@ private class WeaveProject(
                 id("io.github.denis-markushin.jcabi-gradle-plugin")
             }
             repositories { mavenCentral() }
-            dependencies { implementation("org.aspectj:aspectjrt:1.9.25.1") }
             application { mainClass.set("example.MainKt") }
             """.trimIndent(),
         )

@@ -11,6 +11,9 @@ abstract class JcabiGradlePlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         plugins.apply(AspectJPostCompileWeavingPlugin::class.java)
         dependencies.add("aspect", VersionCatalog.JCABI_ASPECTS_DEP)
+        dependencies.constraints.add("aspect", VersionCatalog.ASPECTJ_RT_DEP) {
+            because("ajc inferred from an older aspectjrt rejects recent java targets")
+        }
         configureWeavingCompileTasks()
     }
 }

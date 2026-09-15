@@ -15,6 +15,8 @@ the required dependencies automatically.
 
 - Applies the FreeFair AspectJ Post-Compile Weaving plugin to hook AspectJ into the Java/Kotlin compilation tasks.
 - Adds `com.jcabi:jcabi-aspects` to the `aspect` configuration so jcabi annotations are woven into compiled classes.
+- Requires `org.aspectj:aspectjrt` at least at the version bundled with the plugin through a dependency constraint on the `aspect`
+  configuration. FreeFair picks the ajc version from `aspectjrt`, and the one pulled by jcabi-aspects rejects Java targets above 21.
 - Configures all `compile*` tasks that support AspectJ (`AjcAction`) to use `-Xlint:ignore` to silence AspectJ lint warnings during weaving.
 
 ## Installation
@@ -44,6 +46,16 @@ on the `aspect` configuration to override the default:
 ```kotlin
 dependencies {
   aspect("com.jcabi:jcabi-aspects:0.27.0")
+}
+```
+
+### Raising the aspectjrt version
+
+The constraint only sets a floor, so a newer `aspectjrt` declared in your build or managed by a BOM wins:
+
+```kotlin
+dependencies {
+  aspect("org.aspectj:aspectjrt:x.x.x")
 }
 ```
 
