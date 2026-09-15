@@ -11,14 +11,16 @@ abstract class JcabiGradlePlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         plugins.apply(AspectJPostCompileWeavingPlugin::class.java)
         dependencies.add("aspect", VersionCatalog.JCABI_ASPECTS_DEP)
-        addXlintIgnoreForCompileTasks()
+        configureWeavingCompileTasks()
     }
 }
 
-private fun Project.addXlintIgnoreForCompileTasks() {
+private fun Project.configureWeavingCompileTasks() {
     tasks.named { it.startsWith("compile") }.configureEach {
-        extensions.findByType(AjcAction::class.java)?.apply {
-            this.options.compilerArgs.add("-Xlint:ignore")
+        val ajc = extensions.findByType(AjcAction::class.java) ?: return@configureEach
+        ajc.options.compilerArgs.add("-Xlint:ignore")
+        doFirst("deleteAjcClosures") {
+            ajc.additionalInpath.asFileTree.matching { include("**/*\$AjcClosure*.class") }.forEach { it.delete() }
         }
     }
 }

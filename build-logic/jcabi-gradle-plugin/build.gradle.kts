@@ -10,9 +10,17 @@ buildConfig {
     buildConfigField("JCABI_ASPECTS_DEP", libs.jcabiAspects.get().toString())
 }
 
+val testPlugins = configurations.create("testPlugins") {
+    extendsFrom(configurations.runtimeClasspath.get())
+}
+
 dependencies {
     implementation(plugin(rootProject.libs.plugins.postCompileWeaving))
+    testPlugins(plugin(rootProject.libs.plugins.kotlin.jvm))
+}
 
+tasks.pluginUnderTestMetadata {
+    pluginClasspath.setFrom(sourceSets.main.map { it.output }, testPlugins)
 }
 
 internal fun plugin(provider: Provider<PluginDependency>) = with(provider.get()) {
