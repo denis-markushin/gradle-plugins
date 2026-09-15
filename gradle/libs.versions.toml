@@ -34,6 +34,7 @@ mapstruct-spring-extensions = { module = "org.mapstruct.extensions.spring:mapstr
 
 # third party libs
 jcabiAspects = { module = "com.jcabi:jcabi-aspects", version = "0.26.0" }
+aspectjrt = { module = "org.aspectj:aspectjrt", version = "1.9.25.1" }
 jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "jooq" }
 dema-jooq-liquibase-tc = { module = "io.github.denis-markushin:jooq-liquibase-testcontainer", version.ref = "dema-libs" }
 dema-graphql-starter = { module = "io.github.denis-markushin:graphql-dgs-starter", version.ref = "dema-libs" }

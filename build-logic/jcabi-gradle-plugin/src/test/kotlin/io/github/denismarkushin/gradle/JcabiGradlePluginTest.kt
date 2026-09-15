@@ -34,6 +34,14 @@ class JcabiGradlePluginTest {
     }
 
     @Test
+    fun `plugin requires minimum aspectjrt in aspect configuration`() {
+        val constraint = buildProject().configurations.getByName("aspect").dependencyConstraints
+            .find { it.group == "org.aspectj" && it.name == "aspectjrt" }
+        assertThat(constraint, "aspect configuration lacks the aspectjrt floor that ajc needs for recent java targets")
+            .isNotNull()
+    }
+
+    @Test
     fun `plugin adds Xlint ignore compiler arg to compile tasks`() {
         val project = buildProject()
 
