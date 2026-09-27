@@ -30,6 +30,7 @@ dependencies {
     implementation(project(":spotless"))
     implementation(project(":jcabi-gradle-plugin"))
     implementation(project(":jooq-codegen-gradle-plugin"))
+    implementation(libs.jgit)
     implementation(plugin(libs.plugins.kotlin.spring))
     implementation(plugin(libs.plugins.jooq.codegen))
     implementation(plugin(libs.plugins.spring.boot))
