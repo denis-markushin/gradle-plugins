@@ -1,5 +1,6 @@
 dependencies {
     implementation(plugin(libs.plugins.spotless))
+    testImplementation(libs.jgit)
 }
 
 internal fun plugin(provider: Provider<PluginDependency>) = with(provider.get()) {
