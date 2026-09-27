@@ -12,6 +12,8 @@ private val CANDIDATES = listOf("master", "main")
 
 private val BRANCH_VARIABLES = listOf("CI_COMMIT_REF_NAME", "GITHUB_HEAD_REF", "BITBUCKET_BRANCH", "VERCRAFT_BRANCH")
 
+private const val DEFAULT_BRANCH_VARIABLE = "CI_DEFAULT_BRANCH"
+
 /**
  * Decides how a service gets its version, before Vercraft 0.8.0 is applied.
  *
@@ -19,7 +21,9 @@ private val BRANCH_VARIABLES = listOf("CI_COMMIT_REF_NAME", "GITHUB_HEAD_REF", "
  * property or CI variable names the branch, and when the main branch is not
  * `main` while `defaultMainBranch` is unset. The inspection reads the
  * repository once and returns either a snapshot with the reason, or Vercraft
- * with the main branch found among `master` and `main`, local or remote.
+ * with the main branch: `CI_DEFAULT_BRANCH` when CI sets it, because CI
+ * pipelines often fetch only their own ref before Vercraft's own fetch,
+ * otherwise the first of `master` and `main` found locally or on the remote.
  */
 internal class RepositoryInspection(
     private val dir: File,
@@ -45,7 +49,7 @@ internal class RepositoryInspection(
 
     private fun branch(repository: Repository): String? {
         val remote = property(REMOTE)?.toString() ?: Constants.DEFAULT_REMOTE_NAME
-        return CANDIDATES.firstOrNull { present(repository, Constants.R_HEADS + it) || present(repository, "${Constants.R_REMOTES}$remote/$it") }
+        return env(DEFAULT_BRANCH_VARIABLE) ?: CANDIDATES.firstOrNull { present(repository, Constants.R_HEADS + it) || present(repository, "${Constants.R_REMOTES}$remote/$it") }
     }
 
     private fun present(repository: Repository, ref: String): Boolean = repository.exactRef(ref) != null

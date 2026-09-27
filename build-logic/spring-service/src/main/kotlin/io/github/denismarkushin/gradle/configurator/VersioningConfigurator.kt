@@ -24,7 +24,10 @@ internal fun Project.configureVersioning() {
             version = SNAPSHOT
         }
         is Versioning.Vercraft -> {
-            versioning.branch?.let { extra[DEFAULT_MAIN_BRANCH] = it }
+            versioning.branch?.let {
+                logger.info("Vercraft main branch set to $it for repository at $rootDir")
+                extra[DEFAULT_MAIN_BRANCH] = it
+            }
             plugins.apply(VercraftPlugin::class)
         }
     }

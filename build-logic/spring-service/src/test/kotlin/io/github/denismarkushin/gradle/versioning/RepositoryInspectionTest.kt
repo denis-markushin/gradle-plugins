@@ -77,4 +77,26 @@ class RepositoryInspectionTest {
         val versioning = RepositoryInspection(dir, { null }, { null }).versioning()
         assertThat(versioning, "a made-up main branch was handed to Vercraft").isEqualTo(Versioning.Vercraft(null))
     }
+
+    @Test
+    fun `versioning takes main branch from ci default branch variable`(@TempDir(cleanup = CleanupMode.NEVER) dir: File) {
+        GitFixture.committed(dir, "topic-${UUID.randomUUID()}").close()
+        val branch = "trunk-${UUID.randomUUID()}"
+        val versioning = RepositoryInspection(dir, { null }, { if (it == "CI_DEFAULT_BRANCH") branch else null }).versioning()
+        assertThat(versioning, "CI default branch was not handed to Vercraft").isEqualTo(Versioning.Vercraft(branch))
+    }
+
+    @Test
+    fun `versioning keeps explicit property over ci default branch variable`(@TempDir(cleanup = CleanupMode.NEVER) dir: File) {
+        GitFixture.committed(dir, "master").close()
+        val versioning = RepositoryInspection(dir, { if (it == "defaultMainBranch") "trunk" else null }, { if (it == "CI_DEFAULT_BRANCH") "master" else null }).versioning()
+        assertThat(versioning, "CI default branch overrode explicit defaultMainBranch").isEqualTo(Versioning.Vercraft(null))
+    }
+
+    @Test
+    fun `versioning prefers master when master and main both exist`(@TempDir(cleanup = CleanupMode.NEVER) dir: File) {
+        GitFixture.committed(dir, "master").use { it.branchCreate().setName("main").call() }
+        val versioning = RepositoryInspection(dir, { null }, { null }).versioning()
+        assertThat(versioning, "main was picked although master exists").isEqualTo(Versioning.Vercraft("master"))
+    }
 }
