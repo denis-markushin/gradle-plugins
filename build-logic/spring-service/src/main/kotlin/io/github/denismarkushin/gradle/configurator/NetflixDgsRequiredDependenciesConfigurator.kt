@@ -30,6 +30,7 @@ internal fun Project.configureNetflixDgsFramework() {
         if (!dgsExt.useNetflixDgs.get()) return@afterEvaluate
 
         plugins.apply(CodegenPlugin::class)
+        configurations.named("dgsCodegen") { shouldResolveConsistentlyWith(configurations.getByName("runtimeClasspath")) }
 
         // Auto-wire dema common GraphQL schema starters into dgsCodegen so codegen sees
         // PageInfo / Node / MutationResult / error types / scalars from the shared starter.
