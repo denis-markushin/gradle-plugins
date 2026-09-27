@@ -17,6 +17,7 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.CleanupMode
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
 
@@ -35,10 +36,7 @@ class SpringBootServicePluginTest {
             // VercraftPlugin requires a real git repository
             File(projectDir, ".editorconfig").writeText("[*]\nend_of_line = lf\n")
             File(projectDir, ".gitattributes").writeText("* text=auto\n")
-            File(projectDir, ".dockerignore").writeText("build/\n")
             File(projectDir, ".gitignore").writeText("build/\n")
-            File(projectDir, "Dockerfile.build-image").writeText("FROM eclipse-temurin:21\n")
-            File(projectDir, ".gitlab-ci.yml").writeText("stages: [build]\n")
 
             git("init", "-b", "main")
             git("config", "user.email", "test@test.com")
@@ -268,10 +266,7 @@ class SpringBootServicePluginTest {
 
             File(projectDir, ".editorconfig").writeText("[*]\nend_of_line = lf\n")
             File(projectDir, ".gitattributes").writeText("* text=auto\n")
-            File(projectDir, ".dockerignore").writeText("build/\n")
             File(projectDir, ".gitignore").writeText("build/\n")
-            File(projectDir, "Dockerfile.build-image").writeText("FROM eclipse-temurin:21\n")
-            File(projectDir, ".gitlab-ci.yml").writeText("stages: [build]\n")
 
             git("init", "-b", "main")
             git("config", "user.email", "test@test.com")
@@ -435,6 +430,31 @@ class SpringBootServicePluginTest {
                 assertThat(processed).contains("test-service")
                 assertThat(processed).doesNotContain("@project.name@")
             }
+        }
+    }
+
+    @Nested
+    inner class Scaffolding {
+
+        @Test
+        fun `plugin does not create dockerfile`(@TempDir(cleanup = CleanupMode.NEVER) dir: File) {
+            GitFixture.committed(dir, "master").close()
+            ServiceFixture.project(dir)
+            assertThat(File(dir, "Dockerfile").exists(), "plugin still writes a Dockerfile into the service").isFalse()
+        }
+
+        @Test
+        fun `plugin does not create gitlab ci file`(@TempDir(cleanup = CleanupMode.NEVER) dir: File) {
+            GitFixture.committed(dir, "master").close()
+            ServiceFixture.project(dir)
+            assertThat(File(dir, ".gitlab-ci.yml").exists(), "plugin still writes a .gitlab-ci.yml into the service").isFalse()
+        }
+
+        @Test
+        fun `plugin does not create dockerignore`(@TempDir(cleanup = CleanupMode.NEVER) dir: File) {
+            GitFixture.committed(dir, "master").close()
+            ServiceFixture.project(dir)
+            assertThat(File(dir, ".dockerignore").exists(), "plugin still writes a .dockerignore into the service").isFalse()
         }
     }
 }

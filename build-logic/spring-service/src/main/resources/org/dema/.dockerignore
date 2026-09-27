@@ -1,5 +1,0 @@
-# Ignore everything by default
-*
-
-# Include prebuilt jar
-!build/libs/*.jar

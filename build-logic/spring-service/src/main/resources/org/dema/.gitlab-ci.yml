@@ -1,4 +1,0 @@
-include:
-  - project: 'easyway-efko/infra'
-    file: '/ci-templates/kotlin-service.yml'
-    ref: master
