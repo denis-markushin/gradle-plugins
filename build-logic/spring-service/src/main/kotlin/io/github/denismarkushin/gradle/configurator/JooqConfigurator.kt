@@ -7,8 +7,13 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.getByType
 
+private const val LIQUIBASE_STARTER = "org.springframework.boot:spring-boot-starter-liquibase"
+
 /**
  * Applies [JooqCodegenPlugin] and mirrors `platform { jooq { } }` into its [JooqCodegenExtension].
+ *
+ * While jOOQ is on, `spring-boot-starter-liquibase` goes to `implementation`: jOOQ code is generated
+ * from the Liquibase changelog, and Spring Boot 4 runs the migrations only with this starter.
  *
  * The plugin is applied eagerly (not inside an `afterEvaluate`) so that the plugin's own single
  * `afterEvaluate` is registered during normal project evaluation. Property-to-property `set` calls
@@ -30,4 +35,6 @@ internal fun Project.configureJooq() {
     jooqExt.changelogFile.set(platform.jooq.changelogFile.orElse(jooqExt.changelogFile.get()))
     // configAction has no fallback; an unset property means "no consumer override"
     jooqExt.configAction.set(platform.jooq.configAction)
+    val starter = platform.useJooq.map { if (it) listOf(dependencies.create(LIQUIBASE_STARTER)) else emptyList() }
+    configurations.named("implementation") { dependencies.addAllLater(starter) }
 }
