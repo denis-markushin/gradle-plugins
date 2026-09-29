@@ -41,4 +41,18 @@ class EditorconfigTest {
         val result = SpotlessFixture.check(dir, source)
         assertThat(result.task(":spotlessCheck")?.outcome, "spotlessCheck ignored the spotless:off toggle").isEqualTo(TaskOutcome.SUCCESS)
     }
+
+    @Test
+    @Timeout(value = 10, unit = TimeUnit.MINUTES)
+    fun `spotlessCheck rejects unused import`(@TempDir(cleanup = CleanupMode.NEVER) dir: File) {
+        val source = """
+            package sample
+
+            import java.util.concurrent.ConcurrentSkipListMap
+
+            fun sample() = Unit
+        """.trimIndent() + "\n"
+        val result = SpotlessFixture.check(dir, source)
+        assertThat(result.task(":spotlessKotlinCheck")?.outcome, "spotlessCheck accepted an unused import").isEqualTo(TaskOutcome.FAILED)
+    }
 }

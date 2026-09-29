@@ -25,6 +25,9 @@ ij_kotlin_name_count_to_use_star_import = 2147483647
 ij_kotlin_name_count_to_use_star_import_for_members = 2147483647
 ij_kotlin_packages_to_use_import_on_demand = unset
 
+# ktlint 1.7+ runs no-unused-imports only when enabled explicitly
+ktlint_standard_no-unused-imports = enabled
+
 # disable Ktlint rules that are too strict for this project
 ktlint_standard_annotation = disabled
 ktlint_standard_argument-list-wrapping = disabled
