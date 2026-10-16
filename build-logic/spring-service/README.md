@@ -3,6 +3,12 @@
 [![Build](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml/badge.svg)](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml)
 [![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/io.github.denis-markushin.spring-service?label=spring-service)](https://plugins.gradle.org/plugin/io.github.denis-markushin.spring-service)
 
+- [What it configures](#what-it-configures)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Resource token filtering](#resource-token-filtering)
+- [Test timeout](#test-timeout)
+
 An opinionated convention plugin for production-ready Spring Boot microservices. Applying it is equivalent to wiring together a curated set
 of plugins and dependencies that would otherwise require boilerplate configuration in every service.
 
@@ -16,7 +22,7 @@ of plugins and dependencies that would otherwise require boilerplate configurati
 | **Spring Boot**        | `spring-boot` + `kotlin.plugin.spring` applied; Spring Boot BOM imported into all dependency configurations; `spring-boot-devtools` and `spring-boot-docker-compose` added to `developmentOnly`                                                                                                                                                                                                                                                                                                                                                |
 | **Build info**         | `spring-boot-gradle-plugin` build info task configured so `management.info.build.*` is populated at runtime                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | **Resource filtering** | `processResources` substitutes `@project.*@` tokens from `rootProject.properties` into `*.yml`, `*.yaml`, and `*.properties` files                                                                                                                                                                                                                                                                                                                                                                                             |
-| **Testing**            | JUnit Platform enabled; `spring-boot-test`, `assertk`, `spring-mockk`, `kotest`, `awaitility` added; Mockito excluded globally                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **Testing**            | JUnit Platform enabled; every test and lifecycle method fails after 5 minutes unless a debugger is attached (see [Test timeout](#test-timeout)); `spring-boot-test`, `assertk`, `spring-mockk`, `kotest`, `awaitility` added; Mockito excluded globally                                                                                                                                                                                                                                                                                        |
 | **MapStruct**          | Optional — enabled via `platform.useMapstruct = true`; adds `mapstruct-core`, `mapstruct-spring-annotations`, and kapt processors with Spring component model                                                                                                                                                                                                                                                                                                                                                                                  |
 | **Netflix DGS**        | Optional — enabled via `platform.spring.netflixDgs.useNetflixDgs = true`; imports DGS BOM, applies `com.netflix.dgs.codegen`, configures `GenerateJavaTask`, and auto-wires `graphql-dgs-starter` + `common-scalars-starter` into the `dgsCodegen` configuration so shared schema types (PageInfo, Node, MutationResult, scalars) are visible to codegen. Default `typeMapping` also redirects the starter's `ErrorInterface` hierarchy to `org.dema.graphql.dgs.error.*`, so consumers get error-type codegen without duplicating the mapping. `dgsCodegen` resolves consistently with `runtimeClasspath`, so codegen reads the schema of the starter version the service declares |
 | **jOOQ codegen**       | Enabled by default; applies [`io.github.denis-markushin.jooq-codegen-gradle-plugin`](../jooq-codegen-gradle-plugin/README.md) and mirrors the `platform { jooq { } }` block into it; adds `spring-boot-starter-liquibase`, which Spring Boot 4 needs to run the migrations. Codegen reads `src/main/resources/liquibase/changelog-master.yml` while Spring Boot looks for `db/changelog/db.changelog-master.yaml`, so set `spring.liquibase.change-log: classpath:liquibase/changelog-master.yml`; a service that migrates elsewhere sets `spring.liquibase.enabled: false`. Disable both via `platform.useJooq = false` |
@@ -125,4 +131,21 @@ Properties defined in `rootProject.properties` are available as `@project.<key>@
 spring:
   application:
     name: "@project.name@"
+```
+
+---
+
+## Test timeout
+
+Every test and lifecycle method fails after 5 minutes: the plugin sets `junit.jupiter.execution.timeout.default=5m` on each `Test` task.
+Extension callbacks, such as loading the Spring context, are not timed.
+The timeout is off while a debugger is attached (`junit.jupiter.execution.timeout.mode=disabled_on_debug`), so a breakpoint does not fail the test.
+
+A service that needs longer overrides the value on the task, and a single test overrides it with `@Timeout`.
+A `junit-platform.properties` entry does not work, because JUnit gives JVM system properties precedence over that file.
+
+```kotlin
+tasks.test {
+    systemProperty("junit.jupiter.execution.timeout.default", "10m")
+}
 ```

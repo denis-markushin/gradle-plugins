@@ -11,6 +11,8 @@ import org.gradle.kotlin.dsl.withType
 internal fun Project.configureTestTask() {
     tasks.withType<Test>().configureEach {
         useJUnitPlatform()
+        systemProperty("junit.jupiter.execution.timeout.default", "5m")
+        systemProperty("junit.jupiter.execution.timeout.mode", "disabled_on_debug")
         testLogging {
             events(TestLogEvent.FAILED, TestLogEvent.SKIPPED)
             showStandardStreams = false
