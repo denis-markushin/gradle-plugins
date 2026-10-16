@@ -8,6 +8,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
@@ -30,10 +31,15 @@ abstract class JooqCodegenTask : DefaultTask() {
     @get:Input
     abstract val configurationXml: Property<String>
 
-    /** Liquibase changelog; an input so codegen reruns on content change. Tracks the master only, not `include`d children. */
+    /** Liquibase master changelog; an input so codegen reruns on content change. */
     @get:InputFile
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val changelogFile: RegularFileProperty
+
+    /** Directory of the master changelog; an input so scripts pulled in by `include`/`includeAll` rerun codegen too. */
+    @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val changelogDirectory: DirectoryProperty
 
     /** Classpath used to run the generator. */
     @get:Classpath

@@ -81,6 +81,7 @@ abstract class JooqCodegenPlugin : Plugin<Project> {
             description = "Generates jOOQ sources from the Liquibase changelog."
             this.configurationXml.set(configurationXml)
             changelogFile.set(changelog)
+            changelogDirectory.fileProvider(changelog.map { it.asFile.parentFile })
             codegenClasspath.from(configurations.getByName(CODEGEN_NAME))
             outputDirectory.fileValue(outputDir)
         }
