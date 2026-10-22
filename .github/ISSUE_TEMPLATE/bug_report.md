@@ -1,24 +1,22 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Report a plugin that breaks or misconfigures a build
 ---
 
-## 🐛 Describe the bug
-<!-- A clear and concise description of what the bug is. -->
+## Describe the bug
+<!-- What goes wrong, in one or two sentences. -->
 
-## ⚠️ Current behavior
-<!-- A clear and concise description of what you expected to happen. -->
+## Current behavior
+<!-- What happens, including the failing task and the relevant part of the build output. -->
 
-## ✅ Expected behavior
-<!-- A clear and concise description of what you expected to happen. -->
+## Expected behavior
+<!-- What you expected to happen instead. -->
 
-## 💣 Steps to reproduce
-<!-- How we can reproduce the behavior: -->
+## Steps to reproduce
+<!-- A minimal build script or repository that shows the problem. -->
 
-## 📷 Screenshots
-<!-- If applicable, add screenshots to help explain your problem. -->
-
-## 📱 Tech info
- - Device: <!-- e.g. Nexus One -->
- - OS: <!-- e.g. 7.1.1 -->
- - Library/App version: <!-- e.g. 1.0.0 -->
+## Environment
+- Plugin ID and version: <!-- e.g. io.github.denis-markushin.spring-service 1.5.0 -->
+- Gradle version: <!-- e.g. 9.1.0 -->
+- JDK running the Gradle daemon: <!-- e.g. Temurin 25 -->
+- OS: <!-- e.g. Ubuntu 24.04 -->
