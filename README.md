@@ -1,7 +1,7 @@
 # Gradle Plugins
 
 [![Build](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml/badge.svg)](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml)
-[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/io.github.denis-markushin.spring-service?label=plugin%20portal)](https://plugins.gradle.org/u/denis-markushin)
+[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/io.github.denis-markushin.spring-service?label=plugin%20portal)](https://plugins.gradle.org/u/dmarkushin)
 [![License](https://img.shields.io/github/license/denis-markushin/gradle-plugins)](LICENSE)
 [![JDK](https://img.shields.io/badge/JDK-25%2B-blue)](#requirements)
 
@@ -12,7 +12,7 @@
 - [License](#license)
 
 A multi-module repository hosting opinionated Gradle convention plugins published under the `io.github.denis-markushin` group on
-the [Gradle Plugin Portal](https://plugins.gradle.org/u/denis-markushin).
+the [Gradle Plugin Portal](https://plugins.gradle.org/u/dmarkushin).
 
 ## Plugins
 
