@@ -14,6 +14,8 @@ private val BRANCH_VARIABLES = listOf("CI_COMMIT_REF_NAME", "GITHUB_HEAD_REF", "
 
 private const val DEFAULT_BRANCH_VARIABLE = "CI_DEFAULT_BRANCH"
 
+private const val CEILING_VARIABLE = "GIT_CEILING_DIRECTORIES"
+
 /**
  * Decides how a service gets its version, before Vercraft 0.8.0 is applied.
  *
@@ -24,6 +26,7 @@ private const val DEFAULT_BRANCH_VARIABLE = "CI_DEFAULT_BRANCH"
  * with the main branch: `CI_DEFAULT_BRANCH` when CI sets it, because CI
  * pipelines often fetch only their own ref before Vercraft's own fetch,
  * otherwise the first of `master` and `main` found locally or on the remote.
+ * Like git, the search for the repository stops at `GIT_CEILING_DIRECTORIES`.
  */
 internal class RepositoryInspection(
     private val dir: File,
@@ -31,10 +34,12 @@ internal class RepositoryInspection(
     private val env: (String) -> String?,
 ) {
     fun versioning(): Versioning {
-        val builder = FileRepositoryBuilder().findGitDir(dir)
+        val builder = FileRepositoryBuilder().apply { ceilings().forEach { addCeilingDirectory(it) } }.findGitDir(dir)
         if (builder.gitDir == null) return Versioning.Snapshot("folder $dir is not inside a git repository")
         return builder.build().use { verdict(it) }
     }
+
+    private fun ceilings(): List<File> = env(CEILING_VARIABLE)?.split(File.pathSeparator)?.map(::File).orEmpty()
 
     private fun verdict(repository: Repository): Versioning =
         when {
