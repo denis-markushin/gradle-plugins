@@ -14,7 +14,7 @@ class RepositoryInspectionTest {
 
     @Test
     fun `versioning is snapshot outside git repository`(@TempDir(cleanup = CleanupMode.NEVER) dir: File) {
-        val versioning = RepositoryInspection(dir, { null }, { null }).versioning()
+        val versioning = RepositoryInspection(dir, { null }, { if (it == "GIT_CEILING_DIRECTORIES") dir.parent else null }).versioning()
         assertThat(versioning, "folder outside git got a Vercraft version").isInstanceOf(Versioning.Snapshot::class)
     }
 
