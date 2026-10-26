@@ -8,8 +8,8 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.get
+import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
-import org.gradle.kotlin.dsl.withType
 import org.jooq.codegen.gradle.MetaExtensions.ConfigurationExtension
 import org.jooq.meta.jaxb.Configuration
 import org.jooq.util.jaxb.tools.MiniJAXB
@@ -99,7 +99,7 @@ abstract class JooqCodegenPlugin : Plugin<Project> {
         sourceSets["test"].compileClasspath += jooq.output
         sourceSets["test"].runtimeClasspath += jooq.output
 
-        tasks.withType<Jar>().configureEach { from(jooq.output) }
+        tasks.named<Jar>("jar") { from(jooq.output) }
 
         tasks.named("compileJooqJava").configure { dependsOn(CODEGEN_NAME) }
         tasks.matching { it.name == "compileKotlin" }.configureEach { dependsOn(CODEGEN_NAME) }
