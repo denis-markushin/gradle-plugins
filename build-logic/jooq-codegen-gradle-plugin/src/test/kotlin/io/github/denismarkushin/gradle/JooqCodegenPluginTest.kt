@@ -2,6 +2,8 @@ package io.github.denismarkushin.gradle
 
 import assertk.assertAll
 import assertk.assertThat
+import assertk.assertions.contains
+import assertk.assertions.doesNotContain
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isNotNull
@@ -11,6 +13,7 @@ import org.gradle.api.Action
 import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.bundling.Jar
 import org.gradle.testfixtures.ProjectBuilder
 import org.jooq.codegen.gradle.MetaExtensions.ConfigurationExtension
 import org.jooq.codegen.gradle.MetaExtensions.DatabaseExtension
@@ -18,6 +21,8 @@ import org.jooq.codegen.gradle.MetaExtensions.GeneratorExtension
 import org.jooq.meta.jaxb.Configuration
 import org.jooq.util.jaxb.tools.MiniJAXB
 import org.junit.jupiter.api.Test
+import java.io.File
+import java.util.UUID
 
 class JooqCodegenPluginTest {
 
@@ -33,6 +38,14 @@ class JooqCodegenPluginTest {
     private fun resolvedConfiguration(project: ProjectInternal): Configuration {
         val task = project.tasks.named("jooqCodegen", JooqCodegenTask::class.java).get()
         return MiniJAXB.unmarshal(task.configurationXml.get(), Configuration::class.java)
+    }
+
+    /** Drops an empty, randomly named class file into the jooq source set's classes dir and returns it. */
+    private fun marker(project: ProjectInternal): File {
+        val classes = project.extensions.getByType(SourceSetContainer::class.java)
+            .getByName("jooq").output.classesDirs.first()
+        classes.mkdirs()
+        return File(classes, "${UUID.randomUUID()}.class").also { it.createNewFile() }
     }
 
     @Test
@@ -150,6 +163,26 @@ class JooqCodegenPluginTest {
             assertThat(sourceSets.getByName("jooq").java.srcDirs.contains(generatedDir)).isTrue()
             assertThat(sourceSets.getByName("main").java.srcDirs.contains(generatedDir)).isFalse()
         }
+    }
+
+    @Test
+    fun `plain jar packs the generated classes`() {
+        val project = project()
+        project.evaluate()
+        val marker = marker(project)
+        val jar = project.tasks.named("jar", Jar::class.java).get()
+        assertThat(jar.source.files, "plain jar dropped the generated jOOQ classes").contains(marker)
+    }
+
+    @Test
+    fun `other jar tasks dont pack the generated classes`() {
+        val project = project()
+        project.tasks.register("bootJar", Jar::class.java)
+        project.evaluate()
+        val marker = marker(project)
+        val jar = project.tasks.named("bootJar", Jar::class.java).get()
+        assertThat(jar.source.files, "bootJar duplicated the generated jOOQ classes at its root")
+            .doesNotContain(marker)
     }
 
     @Test
