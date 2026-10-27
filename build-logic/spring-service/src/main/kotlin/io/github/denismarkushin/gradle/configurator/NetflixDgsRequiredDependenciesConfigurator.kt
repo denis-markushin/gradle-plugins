@@ -3,10 +3,12 @@ package io.github.denismarkushin.gradle.configurator
 import com.netflix.graphql.dgs.codegen.gradle.CodegenPlugin
 import com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask
 import io.github.denismarkushin.gradle.extension.DemaPlatformExtension
-import io.github.denismarkushin.gradle.springservice.VersionCatalog.DEMA_GRAPHQL_SCALARS_DEP
-import io.github.denismarkushin.gradle.springservice.VersionCatalog.DEMA_GRAPHQL_STARTER_DEP
+import io.github.denismarkushin.gradle.springservice.VersionCatalog.DEMA_GRAPHQL_SCALARS_MODULE
+import io.github.denismarkushin.gradle.springservice.VersionCatalog.DEMA_GRAPHQL_STARTER_MODULE
+import io.github.denismarkushin.gradle.springservice.VersionCatalog.DEMA_LIBS_VERSION
 import io.github.denismarkushin.gradle.springservice.VersionCatalog.NETFLIX_DGS_BOM_DEP
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.add
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
@@ -35,8 +37,11 @@ internal fun Project.configureNetflixDgsFramework() {
         // Auto-wire dema common GraphQL schema starters into dgsCodegen so codegen sees
         // PageInfo / Node / MutationResult / error types / scalars from the shared starter.
         // Services no longer need to declare these in their own `dependencies { }` blocks.
-        dependencies.add("dgsCodegen", DEMA_GRAPHQL_STARTER_DEP)
-        dependencies.add("dgsCodegen", DEMA_GRAPHQL_SCALARS_DEP)
+        // `prefer` keeps the version a soft default: dgsCodegen resolves consistently with
+        // runtimeClasspath, whose `strictly` constraint must win whether the service is ahead
+        // of or behind the catalog.
+        dependencies.add("dgsCodegen", DEMA_GRAPHQL_STARTER_MODULE) { version { prefer(DEMA_LIBS_VERSION) } }
+        dependencies.add("dgsCodegen", DEMA_GRAPHQL_SCALARS_MODULE) { version { prefer(DEMA_LIBS_VERSION) } }
 
         val generator = dgsExt.generator
         tasks.withType<GenerateJavaTask>().configureEach {
