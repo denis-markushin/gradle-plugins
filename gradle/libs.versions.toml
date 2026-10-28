@@ -12,7 +12,7 @@ git-properties-plugin = "4.0.1"
 mapstruct = "1.6.3"
 mapstruct-spring = "2.0.0"
 jooq = "3.19.37"
-dema-libs = "0.4.0"
+dema-jooq-liquibase-tc = "0.4.0"
 
 # Test
 assertk = "0.28.1"
@@ -37,9 +37,9 @@ jcabiAspects = { module = "com.jcabi:jcabi-aspects", version = "0.26.0" }
 aspectjrt = { module = "org.aspectj:aspectjrt", version = "1.9.25.1" }
 jooq-codegen = { module = "org.jooq:jooq-codegen", version.ref = "jooq" }
 jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version = "7.7.1.202607240634-r" }
-dema-jooq-liquibase-tc = { module = "io.github.denis-markushin:jooq-liquibase-testcontainer", version.ref = "dema-libs" }
-dema-graphql-starter = { module = "io.github.denis-markushin:graphql-dgs-starter", version.ref = "dema-libs" }
-dema-graphql-scalars = { module = "io.github.denis-markushin:common-scalars-starter", version.ref = "dema-libs" }
+dema-jooq-liquibase-tc = { module = "io.github.denis-markushin:jooq-liquibase-testcontainer", version.ref = "dema-jooq-liquibase-tc" }
+dema-graphql-starter = { module = "io.github.denis-markushin:graphql-dgs-starter" }
+dema-graphql-scalars = { module = "io.github.denis-markushin:common-scalars-starter" }
 
 # Test libs
 junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }

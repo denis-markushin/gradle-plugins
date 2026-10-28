@@ -3,8 +3,8 @@ package io.github.denismarkushin.gradle.configurator
 import com.netflix.graphql.dgs.codegen.gradle.CodegenPlugin
 import com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask
 import io.github.denismarkushin.gradle.extension.DemaPlatformExtension
-import io.github.denismarkushin.gradle.springservice.VersionCatalog.DEMA_GRAPHQL_SCALARS_DEP
-import io.github.denismarkushin.gradle.springservice.VersionCatalog.DEMA_GRAPHQL_STARTER_DEP
+import io.github.denismarkushin.gradle.springservice.VersionCatalog.DEMA_GRAPHQL_SCALARS_MODULE
+import io.github.denismarkushin.gradle.springservice.VersionCatalog.DEMA_GRAPHQL_STARTER_MODULE
 import io.github.denismarkushin.gradle.springservice.VersionCatalog.NETFLIX_DGS_BOM_DEP
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -34,9 +34,10 @@ internal fun Project.configureNetflixDgsFramework() {
 
         // Auto-wire dema common GraphQL schema starters into dgsCodegen so codegen sees
         // PageInfo / Node / MutationResult / error types / scalars from the shared starter.
-        // Services no longer need to declare these in their own `dependencies { }` blocks.
-        dependencies.add("dgsCodegen", DEMA_GRAPHQL_STARTER_DEP)
-        dependencies.add("dgsCodegen", DEMA_GRAPHQL_SCALARS_DEP)
+        // No version: dgsCodegen resolves consistently with runtimeClasspath, so the starter
+        // the service runs is the starter codegen reads. A service without it fails here.
+        dependencies.add("dgsCodegen", DEMA_GRAPHQL_STARTER_MODULE)
+        dependencies.add("dgsCodegen", DEMA_GRAPHQL_SCALARS_MODULE)
 
         val generator = dgsExt.generator
         tasks.withType<GenerateJavaTask>().configureEach {
