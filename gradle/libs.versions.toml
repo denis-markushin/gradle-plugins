@@ -12,7 +12,7 @@ git-properties-plugin = "4.0.1"
 mapstruct = "1.6.3"
 mapstruct-spring = "2.0.0"
 jooq = "3.19.37"
-dema-jooq-liquibase-tc = "0.4.0"
+dema-jooq-liquibase-tc = "2.9.2"
 
 # Test
 assertk = "0.28.1"
