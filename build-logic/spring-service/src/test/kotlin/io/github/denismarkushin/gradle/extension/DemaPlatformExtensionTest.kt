@@ -2,6 +2,7 @@ package io.github.denismarkushin.gradle.extension
 
 import assertk.assertAll
 import assertk.assertThat
+import assertk.assertions.containsAtLeast
 import assertk.assertions.isFalse
 import assertk.assertions.isNotNull
 import assertk.assertions.isTrue
@@ -87,6 +88,23 @@ class DemaPlatformExtensionTest {
             assertThat(typeMapping.containsKey("LocalDateTime")).isTrue()
             assertThat(typeMapping.containsKey("Upload")).isTrue()
         }
+    }
+
+    @Test
+    fun `dgs generator typeMapping maps every scalar the dema starters declare`() {
+        assertThat(
+            createExtension().spring.netflixDgs.generator.typeMapping.get(),
+            "default typeMapping leaves a dema starter scalar to a type codegen invents",
+        ).containsAtLeast(
+            "UUID" to "java.util.UUID",
+            "BigDecimal" to "java.math.BigDecimal",
+            "Long" to "kotlin.Long",
+            "Date" to "java.time.LocalDate",
+            "LocalDateTime" to "java.time.LocalDateTime",
+            "Base64" to "kotlin.String",
+            "Email" to "kotlin.String",
+            "Phone" to "kotlin.String",
+        )
     }
 
     @Test

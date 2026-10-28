@@ -63,8 +63,14 @@ abstract class DgsGeneratorHandler @Inject constructor(
     companion object {
         private val DEFAULT_TYPE_MAPPINGS = mapOf(
             "UUID" to "java.util.UUID",
-            "Generated" to "jakarta.annotation.Generated",
+            "BigDecimal" to "java.math.BigDecimal",
+            "Long" to "kotlin.Long",
+            "Date" to "java.time.LocalDate",
             "LocalDateTime" to "java.time.LocalDateTime",
+            "Base64" to "kotlin.String",
+            "Email" to "kotlin.String",
+            "Phone" to "kotlin.String",
+            "Generated" to "jakarta.annotation.Generated",
             "Upload" to "org.springframework.web.multipart.MultipartFile",
             "ErrorInterface" to "org.dema.graphql.dgs.error.ErrorInterface",
             "NotFoundError" to "org.dema.graphql.dgs.error.NotFoundError",
