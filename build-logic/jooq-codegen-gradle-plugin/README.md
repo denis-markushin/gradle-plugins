@@ -15,8 +15,8 @@ jOOQ XML required.
 | Area                   | Details                                                                                                                       |
 |------------------------|-------------------------------------------------------------------------------------------------------------------------------|
 | **Runtime dependency** | `org.jooq:jooq` added to `implementation` (version from `jooqVersion`)                                                        |
-| **Codegen classpath**  | A `jooqCodegen` configuration holding the JDBC driver, the Testcontainers/Liquibase database provider, and codegen extensions |
-| **Codegen task**       | A `jooqCodegen` task (group `jooq`) that runs the generator in an isolated child classloader; marked `@CacheableTask`         |
+| **Codegen classpath**  | A `jooqCodegen` configuration resolved consistently with `runtimeClasspath`: `org.jooq:jooq-codegen` of `jooqVersion`, the Liquibase Testcontainers provider and the JDBC driver |
+| **Codegen task**       | A `jooqCodegen` task (group `jooq`) that runs `GenerationTool` in a separate JVM on that classpath; marked `@CacheableTask`             |
 | **Source set**         | A dedicated `jooq` source set; generated sources go to `build/generated/sources/jooq` and are kept out of `main`              |
 | **Classpath wiring**   | `jooq.output` is added to the compile and runtime classpaths of `main` and `test`, and bundled into every `Jar`               |
 | **Task dependencies**  | `compileJooqJava`, `compileKotlin`, and `kaptGenerateStubs*` are wired to depend on `jooqCodegen`                             |
@@ -64,8 +64,8 @@ The plugin exposes a `demaJooq` extension:
 ```kotlin
 demaJooq {
   enabled = true                         // default: true  — master switch; when false, injects and configures nothing
-  jooqVersion = "3.19.x"                 // default: bundled jOOQ version
-  databaseImage = "postgresql:17.5-alpine" // default — Testcontainers image used to build the codegen JDBC URL
+  jooqVersion = "3.19.x"                 // default: bundled jOOQ version — the runtime dependency and the generator
+  databaseImage = "postgresql:17.5-alpine" // default — only the tag is used; the container image is always postgres
   changelogFile = layout.projectDirectory.file("src/main/resources/liquibase/changelog-master.yml") // default
 
   // Optional override, deep-merged on top of the dema defaults
@@ -96,8 +96,8 @@ merges successive `configuration { }` calls:
 | Setting             | Value                                                                                        |
 |---------------------|----------------------------------------------------------------------------------------------|
 | Logging             | `DEBUG`                                                                                      |
-| JDBC driver / URL   | `ContainerDatabaseDriver` / `jdbc:tc:<databaseImage>:///test-db`                             |
-| Database provider   | `org.dema.jooq.liquibase.LiquibasePostgresTcDatabase`                                        |
+| JDBC driver / URL   | `ContainerDatabaseDriver` / `jdbc:tc:liquibasepostgres:<tag>:///test-db?changelog=<changelogFile>` |
+| Database provider   | `org.jooq.meta.postgres.PostgresDatabase`; the `liquibasepostgres` container applies the changelog first |
 | Input schema        | `public`                                                                                     |
 | Includes / excludes | `.*` / `databasechangelog`, `databasechangeloglock`                                          |
 | Forced types        | `timestamptz` / `timestamp with time zone` → `java.time.LocalDateTime`                       |
@@ -113,8 +113,10 @@ merges successive `configuration { }` calls:
    the runtime and codegen dependencies are injected.
 2. The dema defaults and the optional consumer override are built as separate jOOQ configuration
    trees, deep-merged, and marshalled to XML.
-3. The `jooqCodegen` task unmarshals that XML and runs `GenerationTool.generate` inside a
-   `URLClassLoader` built from the `jooqCodegen` configuration — keeping the codegen classpath
-   (JDBC driver, database provider) isolated from the plugin's own classpath.
+3. The `jooqCodegen` task writes that XML to its temporary directory and runs
+   `org.jooq.codegen.GenerationTool` in a separate JVM whose classpath is the `jooqCodegen`
+   configuration. The configuration resolves consistently with `runtimeClasspath`, so generator,
+   jOOQ meta, Liquibase and the driver are the versions the service runs; only Testcontainers and
+   the `liquibasepostgres` provider are the plugin's own pins.
 4. Generated sources land in the `jooq` source set and are wired into `main`/`test` so they compile
    and ship without polluting `main`'s source directories.

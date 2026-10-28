@@ -1,6 +1,7 @@
 package io.github.denismarkushin.gradle
 
 import assertk.assertThat
+import assertk.assertions.contains
 import assertk.assertions.exists
 import assertk.assertions.isEqualTo
 import org.gradle.testkit.runner.GradleRunner
@@ -34,6 +35,33 @@ class JooqCodegenTaskTest {
             .withArguments("jooqCodegen")
             .build()
         assertThat(File(dir, "build/generated/sources/jooq/com/acme/tables/Book.java"), "jooqCodegen produced no Book table class").exists()
+    }
+
+    @Test
+    @Timeout(value = 10, unit = TimeUnit.MINUTES)
+    fun `jooqCodegen runs the generator of the configured jooqVersion`(@TempDir dir: File) {
+        sampleProject(
+            dir,
+            """
+            demaJooq {
+                jooqVersion = "3.21.7"
+                configuration {
+                    generator {
+                        generate {
+                            isGeneratedAnnotation = true
+                        }
+                    }
+                }
+            }
+            """.trimIndent(),
+        )
+        GradleRunner.create()
+            .withProjectDir(dir)
+            .withPluginClasspath()
+            .withArguments("jooqCodegen")
+            .build()
+        val book = File(dir, "build/generated/sources/jooq/com/acme/tables/Book.java").readText()
+        assertThat(book, "the generator did not follow jooqVersion").contains("jOOQ version:3.21.7")
     }
 
     private fun sampleProject(dir: File, demaJooqBlock: String) {

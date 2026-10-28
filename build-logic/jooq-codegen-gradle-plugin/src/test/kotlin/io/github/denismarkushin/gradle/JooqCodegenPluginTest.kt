@@ -4,6 +4,7 @@ import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.doesNotContain
+import assertk.assertions.endsWith
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isNotNull
@@ -75,6 +76,17 @@ class JooqCodegenPluginTest {
     }
 
     @Test
+    fun `plugin injects the generator of jooqVersion into the codegen classpath`() {
+        val project = project()
+        project.extensions.getByType(JooqCodegenExtension::class.java).jooqVersion.set("3.21.7")
+        project.evaluate()
+
+        val generator = project.configurations.getByName("jooqCodegen").dependencies
+            .find { it.group == "org.jooq" && it.name == "jooq-codegen" }
+        assertThat(generator?.version, "codegen classpath carries a generator of another version than jooqVersion").isEqualTo("3.21.7")
+    }
+
+    @Test
     fun `disabled plugin injects nothing`() {
         val project = project()
         project.extensions.getByType(JooqCodegenExtension::class.java).enabled.set(false)
@@ -120,7 +132,10 @@ class JooqCodegenPluginTest {
 
         val config = resolvedConfiguration(project)
         assertAll {
-            assertThat(config.jdbc.url).isEqualTo("jdbc:tc:postgresql:16-alpine:///test-db")
+            assertThat(config.jdbc.url).isEqualTo(
+                "jdbc:tc:liquibasepostgres:16-alpine:///test-db?changelog=" +
+                    project.layout.projectDirectory.file("src/main/resources/liquibase/changelog-master.yml").asFile.absolutePath,
+            )
             assertThat(config.generator.database.includes).isEqualTo("custom_.*")
             assertThat(config.generator.generate.nullableAnnotationType)
                 .isEqualTo("org.jetbrains.annotations.Nullable")
@@ -134,9 +149,7 @@ class JooqCodegenPluginTest {
         project.extensions.getByType(JooqCodegenExtension::class.java).changelogFile.set(changelog)
         project.evaluate()
 
-        val value = resolvedConfiguration(project).generator.database.properties
-            .single { it.key == "liquibaseChangelogFile" }.value
-        assertThat(value).isEqualTo(changelog.asFile.absolutePath)
+        assertThat(resolvedConfiguration(project).jdbc.url).endsWith("?changelog=${changelog.asFile.absolutePath}")
     }
 
     @Test

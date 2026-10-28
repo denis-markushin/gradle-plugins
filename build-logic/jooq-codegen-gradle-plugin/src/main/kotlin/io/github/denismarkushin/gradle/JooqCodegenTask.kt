@@ -14,15 +14,15 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
-import org.jooq.codegen.GenerationTool
-import org.jooq.meta.jaxb.Configuration
-import org.jooq.util.jaxb.tools.MiniJAXB
-import java.net.URLClassLoader
+import org.gradle.process.ExecOperations
+import java.io.File
+import javax.inject.Inject
 
 /**
- * Runs jOOQ code generation in a child classloader built from the `jooqCodegen` configuration,
- * so the codegen classpath (JDBC driver, database provider, codegen extensions) stays
- * independent of the plugin's own classpath.
+ * Runs jOOQ code generation in a separate JVM whose classpath is exactly the `jooqCodegen`
+ * configuration: the generator of the service's jOOQ version, its driver, Liquibase and the
+ * Testcontainers provider. No plugin class is on that classpath, so the plugin's own jOOQ (used
+ * only to build the configuration XML) can never shadow the service's.
  */
 @CacheableTask
 abstract class JooqCodegenTask : DefaultTask() {
@@ -49,18 +49,17 @@ abstract class JooqCodegenTask : DefaultTask() {
     @get:OutputDirectory
     abstract val outputDirectory: DirectoryProperty
 
+    @get:Inject
+    abstract val execOperations: ExecOperations
+
     @TaskAction
     fun generate() {
-        val urls = codegenClasspath.files.map { it.toURI().toURL() }.toTypedArray()
-        URLClassLoader(urls, javaClass.classLoader).use { child ->
-            val previous = Thread.currentThread().contextClassLoader
-            try {
-                Thread.currentThread().contextClassLoader = child
-                @Suppress("UnstableApiUsage")
-                GenerationTool.generate(MiniJAXB.unmarshal(configurationXml.get(), Configuration::class.java))
-            } finally {
-                Thread.currentThread().contextClassLoader = previous
-            }
+        val xml = File(temporaryDir, "codegen.xml")
+        xml.writeText(configurationXml.get())
+        execOperations.javaexec {
+            classpath(codegenClasspath)
+            mainClass.set("org.jooq.codegen.GenerationTool")
+            args(xml.absolutePath)
         }
     }
 }
