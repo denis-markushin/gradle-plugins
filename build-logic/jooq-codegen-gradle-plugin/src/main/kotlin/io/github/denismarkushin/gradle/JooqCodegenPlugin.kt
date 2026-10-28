@@ -4,12 +4,14 @@ import io.github.denismarkushin.gradle.jooq.VersionCatalog
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFile
+import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
+import org.gradle.kotlin.dsl.withType
 import org.jooq.codegen.gradle.MetaExtensions.ConfigurationExtension
 import org.jooq.meta.jaxb.Configuration
 import org.jooq.util.jaxb.tools.MiniJAXB
@@ -20,7 +22,12 @@ abstract class JooqCodegenPlugin : Plugin<Project> {
 
     override fun apply(target: Project): Unit = with(target) {
         configurations.create(CODEGEN_NAME) {
-            description = "Classpath for jOOQ code generation: JDBC driver, database provider, codegen extensions."
+            description = "Classpath for jOOQ code generation: generator, JDBC driver, Liquibase Testcontainers provider, codegen extensions."
+        }
+        plugins.withType<JavaPlugin> {
+            configurations.named(CODEGEN_NAME) {
+                shouldResolveConsistentlyWith(configurations.getByName("runtimeClasspath"))
+            }
         }
         val ext = extensions.create(JooqCodegenExtension.NAME, JooqCodegenExtension::class.java)
         ext.changelogFile.convention(
@@ -41,6 +48,7 @@ abstract class JooqCodegenPlugin : Plugin<Project> {
 
     private fun Project.injectDependencies(ext: JooqCodegenExtension) {
         dependencies.add("implementation", "org.jooq:jooq:${ext.jooqVersion.get()}")
+        dependencies.add(CODEGEN_NAME, "org.jooq:jooq-codegen:${ext.jooqVersion.get()}")
         dependencies.add(CODEGEN_NAME, VersionCatalog.JOOQ_LIQUIBASE_TC_DEP)
     }
 
@@ -56,7 +64,7 @@ abstract class JooqCodegenPlugin : Plugin<Project> {
 
         val defaults = objects.newInstance(ConfigurationExtension::class.java, objects)
         defaults.applyDemaDefaults(
-            databaseImage = ext.databaseImage.get(),
+            postgresTag = ext.databaseImage.get().substringAfter(':'),
             changelogFile = changelogFile,
             targetDir = targetDir,
             packageName = packageName,

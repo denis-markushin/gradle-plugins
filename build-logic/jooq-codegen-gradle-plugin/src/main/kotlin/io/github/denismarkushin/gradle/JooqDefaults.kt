@@ -6,13 +6,13 @@ import org.jooq.meta.jaxb.Logging
 /**
  * Populates a jOOQ [ConfigurationExtension] with the dema platform defaults.
  *
- * @param databaseImage testcontainers image, e.g. `postgresql:17.5-alpine`
+ * @param postgresTag tag of the `postgres` image Testcontainers starts, e.g. `17.5-alpine`
  * @param changelogFile absolute path to the Liquibase master changelog
  * @param targetDir absolute path the generated sources are written to
  * @param packageName root package for generated classes
  */
 internal fun ConfigurationExtension.applyDemaDefaults(
-    databaseImage: String,
+    postgresTag: String,
     changelogFile: String,
     targetDir: String,
     packageName: String,
@@ -21,21 +21,15 @@ internal fun ConfigurationExtension.applyDemaDefaults(
 
     jdbc {
         driver = "org.testcontainers.jdbc.ContainerDatabaseDriver"
-        url = "jdbc:tc:$databaseImage:///test-db"
+        url = "jdbc:tc:liquibasepostgres:$postgresTag:///test-db?changelog=$changelogFile"
     }
 
     generator {
         database {
-            name = "org.dema.jooq.liquibase.LiquibasePostgresTcDatabase"
+            name = "org.jooq.meta.postgres.PostgresDatabase"
             includes = ".*"
             excludes = "databasechangelog|databasechangeloglock"
             inputSchema = "public"
-            properties {
-                property {
-                    key = "liquibaseChangelogFile"
-                    value = changelogFile
-                }
-            }
             forcedTypes {
                 forcedType {
                     userType = "java.time.LocalDateTime"
