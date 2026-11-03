@@ -14,6 +14,7 @@ A lightweight convention plugin for reusable Kotlin library projects.
 | **Kotlin baseline** | JVM toolchain, compiler args, and repositories are inherited from [`io.github.denis-markushin.kotlin`](../kotlin/README.md) (applied automatically) |
 | **Java**            | `java-library` plugin applied; `-sources.jar` and `-javadoc.jar` artifacts produced                                                                 |
 | **Publishing**      | `maven-publish` applied; `mavenJava` publication created from the `java` component                                                                  |
+| **Coverage**        | Kover on `check` with generated code excluded — inherited from [`io.github.denis-markushin.kotlin`](../kotlin/README.md#coverage) |
 
 ---
 

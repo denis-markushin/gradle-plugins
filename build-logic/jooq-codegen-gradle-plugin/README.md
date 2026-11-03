@@ -101,7 +101,7 @@ merges successive `configuration { }` calls:
 | Input schema        | `public`                                                                                     |
 | Includes / excludes | `.*` / `databasechangelog`, `databasechangeloglock`                                          |
 | Forced types        | `timestamptz` / `timestamp with time zone` → `java.time.LocalDateTime`                       |
-| Generate            | no POJOs, no DAOs, no `RecordN`; JetBrains `@Nullable`/`@NotNull` and validation annotations |
+| Generate            | no POJOs, no DAOs, no `RecordN`; JetBrains `@Nullable`/`@NotNull` and validation annotations; `@org.jooq.Generated` without a date, so coverage tools can exclude generated classes and codegen stays reproducible |
 | Target directory    | `build/generated/sources/jooq`                                                               |
 | Target package      | project `group` with dashes removed                                                          |
 
