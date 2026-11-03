@@ -20,6 +20,7 @@ import org.jooq.codegen.gradle.MetaExtensions.ConfigurationExtension
 import org.jooq.codegen.gradle.MetaExtensions.DatabaseExtension
 import org.jooq.codegen.gradle.MetaExtensions.GeneratorExtension
 import org.jooq.meta.jaxb.Configuration
+import org.jooq.meta.jaxb.GeneratedAnnotationType
 import org.jooq.util.jaxb.tools.MiniJAXB
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -140,6 +141,36 @@ class JooqCodegenPluginTest {
             assertThat(config.generator.generate.nullableAnnotationType)
                 .isEqualTo("org.jetbrains.annotations.Nullable")
         }
+    }
+
+    @Test
+    fun `generated classes carry the jooq generated annotation`() {
+        val project = project()
+        project.evaluate()
+        assertThat(
+            resolvedConfiguration(project).generator.generate.generatedAnnotationType,
+            "generated jOOQ classes carry no bytecode-visible annotation and count against coverage",
+        ).isEqualTo(GeneratedAnnotationType.ORG_JOOQ_GENERATED)
+    }
+
+    @Test
+    fun `generated annotation is enabled`() {
+        val project = project()
+        project.evaluate()
+        assertThat(
+            resolvedConfiguration(project).generator.generate.isGeneratedAnnotation,
+            "the annotation type is set but the annotation itself is off",
+        ).isTrue()
+    }
+
+    @Test
+    fun `generated annotation carries no date`() {
+        val project = project()
+        project.evaluate()
+        assertThat(
+            resolvedConfiguration(project).generator.generate.isGeneratedAnnotationDate,
+            "a date in the annotation makes every codegen run produce different sources",
+        ).isFalse()
     }
 
     @Test
