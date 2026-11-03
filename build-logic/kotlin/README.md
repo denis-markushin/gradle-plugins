@@ -52,7 +52,7 @@ plugins {
 Kover measures line coverage on `check`: the XML report in the JaCoCo schema lands in `build/reports/kover/report.xml` and the log prints
 `application line coverage: NN%`. Generated code is excluded by default: classes annotated with any `*Generated` annotation that survives
 compilation (Netflix DGS codegen, jOOQ with `org.jooq.Generated`) and MapStruct implementations by name (`*Impl`,
-`*ConversionServiceAdapter`), since MapStruct's `javax.annotation.processing.Generated` has source retention and is invisible in bytecode.
+`*ConversionServiceAdapter`), since MapStruct's `javax.annotation.processing.Generated` has source retention and is invisible in bytecode, as well as the `$AjcClosureN` classes AspectJ weaving emits (`*$AjcClosure*`).
 
 A GitLab job gets the percentage and the diff annotation with:
 

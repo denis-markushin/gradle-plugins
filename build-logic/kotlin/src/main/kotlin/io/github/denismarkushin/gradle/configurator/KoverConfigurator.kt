@@ -10,7 +10,8 @@ import org.gradle.kotlin.dsl.configure
  * percentage from the log line. Generated code is excluded: DGS marks its classes with a
  * binary-retention `Generated`, jOOQ with `org.jooq.Generated` (enabled by the jooq-codegen
  * defaults), while MapStruct's `javax.annotation.processing.Generated` has source retention and
- * is invisible in bytecode, hence the class patterns.
+ * is invisible in bytecode, hence the class patterns, as are the `$AjcClosureN` classes AspectJ
+ * weaving emits.
  */
 internal fun Project.configureKover() {
     plugins.apply("org.jetbrains.kotlinx.kover")
@@ -19,7 +20,7 @@ internal fun Project.configureKover() {
             filters {
                 excludes {
                     annotatedBy("*Generated")
-                    classes("*Impl", "*ConversionServiceAdapter")
+                    classes("*Impl", "*ConversionServiceAdapter", "*\$AjcClosure*")
                 }
             }
             total {

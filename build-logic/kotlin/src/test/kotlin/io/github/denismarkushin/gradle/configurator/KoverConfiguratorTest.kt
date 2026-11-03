@@ -51,4 +51,10 @@ class KoverConfiguratorTest {
         val excludes = evaluated().extensions.getByType(KoverProjectExtension::class.java).reports.filters.excludes
         assertThat(excludes.classes.get(), "MapStruct carries a SOURCE-retention annotation, so its implementations count against coverage").contains("*Impl")
     }
+
+    @Test
+    fun `aspectj closures are excluded by name`() {
+        val excludes = evaluated().extensions.getByType(KoverProjectExtension::class.java).reports.filters.excludes
+        assertThat(excludes.classes.get(), "AspectJ weaving emits synthetic closure classes that count against coverage").contains("*\$AjcClosure*")
+    }
 }
