@@ -3,6 +3,9 @@
 [![Build](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml/badge.svg)](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml)
 [![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/io.github.denis-markushin.kotlin-library?label=kotlin-library)](https://plugins.gradle.org/plugin/io.github.denis-markushin.kotlin-library)
 
+- [What it configures](#what-it-configures)
+- [Installation](#installation)
+
 A lightweight convention plugin for reusable Kotlin library projects.
 
 ---

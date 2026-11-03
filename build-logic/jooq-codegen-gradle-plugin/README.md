@@ -3,6 +3,13 @@
 [![Build](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml/badge.svg)](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml)
 [![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/io.github.denis-markushin.jooq-codegen?label=jooq-codegen)](https://plugins.gradle.org/plugin/io.github.denis-markushin.jooq-codegen)
 
+- [What it configures](#what-it-configures)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Built-in defaults](#built-in-defaults)
+- [How it works](#how-it-works)
+
 A convention plugin that generates jOOQ sources from a Liquibase changelog. It spins up a throwaway
 PostgreSQL container at codegen time (via Testcontainers JDBC), applies the changelog to it, and
 generates type-safe jOOQ classes against the resulting schema — no live database or hand-written
