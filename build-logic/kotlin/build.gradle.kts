@@ -13,6 +13,7 @@ buildConfig {
 dependencies {
     // api exposes kotlin-gradle-plugin types (KaptExtension, KotlinCompile, etc.) to consumers
     api(plugin(libs.plugins.kotlin.jvm))
+    implementation(plugin(libs.plugins.kover))
 }
 
 internal fun plugin(provider: Provider<PluginDependency>) = with(provider.get()) {

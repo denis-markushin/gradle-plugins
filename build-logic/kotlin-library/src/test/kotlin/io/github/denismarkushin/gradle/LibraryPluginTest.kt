@@ -43,6 +43,12 @@ class LibraryPluginTest {
     }
 
     @Test
+    fun `plugin applies kover`() {
+        val project = buildProject()
+        assertThat(project.plugins.hasPlugin("org.jetbrains.kotlinx.kover"), "a library without kover measures no coverage").isTrue()
+    }
+
+    @Test
     fun `plugin configures mavenCentral and mavenLocal repositories`() {
         val project = buildProject()
 

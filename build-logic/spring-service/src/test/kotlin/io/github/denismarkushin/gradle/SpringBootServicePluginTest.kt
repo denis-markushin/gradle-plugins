@@ -88,6 +88,11 @@ class SpringBootServicePluginTest {
         }
 
         @Test
+        fun `plugin applies kover`() {
+            assertThat(project.plugins.hasPlugin("org.jetbrains.kotlinx.kover"), "a service without kover measures no coverage").isTrue()
+        }
+
+        @Test
         fun `plugin registers platform extension with correct defaults`() {
             val ext = project.extensions.findByName(DemaPlatformExtension.NAME)
             assertThat(ext).isNotNull()
