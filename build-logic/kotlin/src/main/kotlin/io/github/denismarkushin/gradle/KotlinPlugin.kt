@@ -1,6 +1,7 @@
 package io.github.denismarkushin.gradle
 
 import io.github.denismarkushin.gradle.configurator.configureCompilation
+import io.github.denismarkushin.gradle.configurator.configureKover
 import io.github.denismarkushin.gradle.configurator.configureRepositories
 import io.github.denismarkushin.gradle.kotlinlibrary.VersionCatalog
 import org.gradle.api.Plugin
@@ -13,5 +14,6 @@ class KotlinPlugin : Plugin<Project> {
 
         configureRepositories()
         configureCompilation(VersionCatalog.JAVA_VERSION.toString())
+        configureKover()
     }
 }

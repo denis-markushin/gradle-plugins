@@ -1,6 +1,7 @@
 package io.github.denismarkushin.gradle
 
 import org.jooq.codegen.gradle.MetaExtensions.ConfigurationExtension
+import org.jooq.meta.jaxb.GeneratedAnnotationType
 import org.jooq.meta.jaxb.Logging
 
 /**
@@ -46,6 +47,9 @@ internal fun ConfigurationExtension.applyDemaDefaults(
             nullableAnnotationType = "org.jetbrains.annotations.Nullable"
             nonnullAnnotationType = "org.jetbrains.annotations.NotNull"
             isValidationAnnotations = true
+            isGeneratedAnnotation = true
+            generatedAnnotationType = GeneratedAnnotationType.ORG_JOOQ_GENERATED
+            isGeneratedAnnotationDate = false
         }
         target {
             directory = targetDir

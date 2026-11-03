@@ -45,13 +45,6 @@ class JooqCodegenTaskTest {
             """
             demaJooq {
                 jooqVersion = "3.21.7"
-                configuration {
-                    generator {
-                        generate {
-                            isGeneratedAnnotation = true
-                        }
-                    }
-                }
             }
             """.trimIndent(),
         )
