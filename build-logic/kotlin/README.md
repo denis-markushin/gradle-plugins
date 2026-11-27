@@ -1,15 +1,15 @@
 # kotlin
 
 [![Build](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml/badge.svg)](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml)
-[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/io.github.denis-markushin.kotlin?label=kotlin)](https://plugins.gradle.org/plugin/io.github.denis-markushin.kotlin)
+[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/org.demalab.kotlin?label=kotlin)](https://plugins.gradle.org/plugin/org.demalab.kotlin)
 
 - [What it configures](#what-it-configures)
 - [Installation](#installation)
 - [Coverage](#coverage)
 
 A foundational Kotlin convention plugin. Applies `org.jetbrains.kotlin.jvm` and configures the JVM toolchain, compiler arguments, and
-standard repositories. It is the shared baseline used by `io.github.denis-markushin.kotlin-library` and
-`io.github.denis-markushin.spring-service`; you can also apply it directly to any Kotlin/JVM project that does not need the higher-level
+standard repositories. It is the shared baseline used by `org.demalab.kotlin-library` and
+`org.demalab.spring-service`; you can also apply it directly to any Kotlin/JVM project that does not need the higher-level
 conventions.
 
 ---
@@ -31,18 +31,18 @@ conventions.
 ```kotlin
 // build.gradle.kts
 plugins {
-  id("io.github.denis-markushin.kotlin") version "x.x.x"
+  id("org.demalab.kotlin") version "x.x.x"
 }
 ```
 
 ```groovy
 // build.gradle
 plugins {
-  id 'io.github.denis-markushin.kotlin' version 'x.x.x'
+  id 'org.demalab.kotlin' version 'x.x.x'
 }
 ```
 
-> If you also apply `io.github.denis-markushin.kotlin-library` or `io.github.denis-markushin.spring-service`, do not apply this plugin
+> If you also apply `org.demalab.kotlin-library` or `org.demalab.spring-service`, do not apply this plugin
 > separately — it is already pulled in.
 
 ---

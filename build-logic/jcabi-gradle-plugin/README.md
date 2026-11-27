@@ -1,7 +1,7 @@
 # jcabi-gradle-plugin
 
 [![Build](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml/badge.svg)](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml)
-[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/io.github.denis-markushin.jcabi-gradle-plugin)](https://plugins.gradle.org/plugin/io.github.denis-markushin.jcabi-gradle-plugin)
+[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/org.demalab.jcabi)](https://plugins.gradle.org/plugin/org.demalab.jcabi)
 
 Gradle plugin that wires [jcabi-aspects](https://github.com/jcabi/jcabi-aspects) into your build by enabling post-compile weaving and adding
 the required dependencies automatically.
@@ -23,13 +23,13 @@ the required dependencies automatically.
 
 ```kotlin
 plugins {
-  id("io.github.denis-markushin.jcabi-gradle-plugin") version "x.x.x"
+  id("org.demalab.jcabi") version "x.x.x"
 }
 ```
 
 ```groovy
 plugins {
-  id 'io.github.denis-markushin.jcabi-gradle-plugin' version 'x.x.x'
+  id 'org.demalab.jcabi' version 'x.x.x'
 }
 ```
 

@@ -1,3 +1,5 @@
+import org.gradle.plugin.compatibility.compatibility
+
 dependencies {
     implementation(project(":kotlin"))
     implementation(plugin(libs.plugins.kotlin.spring))
@@ -11,14 +13,14 @@ internal fun plugin(provider: Provider<PluginDependency>) = with(provider.get())
 gradlePlugin {
     plugins {
         create("kotlin-library") {
-            id = "io.github.denis-markushin.kotlin-library"
+            id = "org.demalab.kotlin-library"
             displayName = "Kotlin Library Convention Plugin"
             description = """
                 Opinionated convention plugin for Kotlin library projects.
                 Pre-configures Kotlin JVM and kotlin-spring compiler plugin, with a standard
                 testing stack (JUnit 5, assertk) — so library authors can focus on API design.
             """.trimIndent()
-            implementationClass = "io.github.denismarkushin.gradle.LibraryPlugin"
+            implementationClass = "org.demalab.gradle.LibraryPlugin"
             tags.set(
                 listOf(
                     "kotlin",
@@ -26,6 +28,11 @@ gradlePlugin {
                     "convention-plugin",
                 ),
             )
+            compatibility {
+                features {
+                    configurationCache = false
+                }
+            }
         }
     }
 }

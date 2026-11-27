@@ -1,10 +1,12 @@
+import org.gradle.plugin.compatibility.compatibility
+
 plugins {
     alias(libs.plugins.buildconfig)
 }
 
 buildConfig {
     className("VersionCatalog")
-    packageName("io.github.denismarkushin.gradle.springservice")
+    packageName("org.demalab.gradle.springservice")
     // Spring
     buildConfigField("SPRING_CLOUD_BOM_DEP", libs.cloud.dependencies.get().toString())
     buildConfigField("NETFLIX_DGS_BOM_DEP", libs.netflix.dgs.dependencies.get().toString())
@@ -46,7 +48,7 @@ internal fun plugin(provider: Provider<PluginDependency>) = with(provider.get())
 gradlePlugin {
     plugins {
         create("spring-service") {
-            id = "io.github.denis-markushin.spring-service"
+            id = "org.demalab.spring-service"
             displayName = "Spring Boot Service Convention Plugin"
             description = """
                 Opinionated convention plugin for production-ready Spring Boot microservices.
@@ -54,7 +56,7 @@ gradlePlugin {
                 Spotless code formatting, testing stack (JUnit 5, assertk, awaitility),
                 and semantic versioning — so you can focus on business logic.
             """.trimIndent()
-            implementationClass = "io.github.denismarkushin.gradle.SpringBootServicePlugin"
+            implementationClass = "org.demalab.gradle.SpringBootServicePlugin"
             tags.set(
                 listOf(
                     "spring-boot",
@@ -69,6 +71,11 @@ gradlePlugin {
                     "ci-cd",
                 ),
             )
+            compatibility {
+                features {
+                    configurationCache = false
+                }
+            }
         }
     }
 }

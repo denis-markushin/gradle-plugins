@@ -1,7 +1,7 @@
 # jooq-codegen
 
 [![Build](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml/badge.svg)](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml)
-[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/io.github.denis-markushin.jooq-codegen?label=jooq-codegen)](https://plugins.gradle.org/plugin/io.github.denis-markushin.jooq-codegen)
+[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/org.demalab.jooq-codegen?label=jooq-codegen)](https://plugins.gradle.org/plugin/org.demalab.jooq-codegen)
 
 - [What it configures](#what-it-configures)
 - [Prerequisites](#prerequisites)
@@ -48,14 +48,14 @@ The generated package is derived from the project `group` with dashes stripped
 ```kotlin
 // build.gradle.kts
 plugins {
-  id("io.github.denis-markushin.jooq-codegen") version "x.x.x"
+  id("org.demalab.jooq-codegen") version "x.x.x"
 }
 ```
 
 ```groovy
 // build.gradle
 plugins {
-  id 'io.github.denis-markushin.jooq-codegen' version 'x.x.x'
+  id 'org.demalab.jooq-codegen' version 'x.x.x'
 }
 ```
 

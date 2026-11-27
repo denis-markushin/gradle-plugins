@@ -1,0 +1,26 @@
+package org.demalab.gradle.extension
+
+import org.gradle.api.Action
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.Property
+import org.gradle.kotlin.dsl.property
+import org.jooq.codegen.gradle.MetaExtensions.ConfigurationExtension
+import javax.inject.Inject
+
+/**
+ * `platform { jooq { } }` configuration. Mirrored into the standalone
+ * `JooqCodegenExtension` by [org.demalab.gradle.configurator.configureJooq].
+ */
+abstract class JooqHandler @Inject constructor(
+    objects: ObjectFactory,
+) {
+    val jooqVersion: Property<String> = objects.property()
+    val databaseImage: Property<String> = objects.property()
+    val changelogFile: RegularFileProperty = objects.fileProperty()
+    val configAction: Property<Action<ConfigurationExtension>> = objects.property()
+
+    fun configuration(action: Action<ConfigurationExtension>) {
+        configAction.set(action)
+    }
+}

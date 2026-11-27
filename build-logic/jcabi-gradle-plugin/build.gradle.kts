@@ -1,10 +1,12 @@
+import org.gradle.plugin.compatibility.compatibility
+
 plugins {
     alias(libs.plugins.buildconfig)
 }
 
 buildConfig {
     className("VersionCatalog")
-    packageName("io.github.denismarkushin.gradle.jcabi")
+    packageName("org.demalab.gradle.jcabi")
     useKotlinOutput { internalVisibility = true }
 
     buildConfigField("JCABI_ASPECTS_DEP", libs.jcabiAspects.get().toString())
@@ -31,11 +33,16 @@ internal fun plugin(provider: Provider<PluginDependency>) = with(provider.get())
 gradlePlugin {
     plugins {
         create("jcabiGradlePlugin") {
-            id = "io.github.denis-markushin.jcabi-gradle-plugin"
-            implementationClass = "io.github.denismarkushin.gradle.JcabiGradlePlugin"
+            id = "org.demalab.jcabi"
+            implementationClass = "org.demalab.gradle.JcabiGradlePlugin"
             displayName = "Jcabi plugin for gradle"
             description = "The plugin configures post-compile-weaving and adds required jcabi dependencies"
             tags.set(listOf("jcabi", "aspect"))
+            compatibility {
+                features {
+                    configurationCache = false
+                }
+            }
         }
     }
 }

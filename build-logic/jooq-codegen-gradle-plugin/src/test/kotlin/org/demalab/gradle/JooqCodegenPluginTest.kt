@@ -1,0 +1,253 @@
+package org.demalab.gradle
+
+import assertk.assertAll
+import assertk.assertThat
+import assertk.assertions.contains
+import assertk.assertions.doesNotContain
+import assertk.assertions.endsWith
+import assertk.assertions.isEqualTo
+import assertk.assertions.isFalse
+import assertk.assertions.isNotNull
+import assertk.assertions.isNull
+import assertk.assertions.isTrue
+import org.gradle.api.Action
+import org.gradle.api.internal.project.ProjectInternal
+import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.bundling.Jar
+import org.gradle.testfixtures.ProjectBuilder
+import org.jooq.codegen.gradle.MetaExtensions.ConfigurationExtension
+import org.jooq.codegen.gradle.MetaExtensions.DatabaseExtension
+import org.jooq.codegen.gradle.MetaExtensions.GeneratorExtension
+import org.jooq.meta.jaxb.Configuration
+import org.jooq.meta.jaxb.GeneratedAnnotationType
+import org.jooq.util.jaxb.tools.MiniJAXB
+import org.junit.jupiter.api.Test
+import java.io.File
+import java.util.UUID
+
+class JooqCodegenPluginTest {
+
+    private fun project(group: String = "ru.easyway.demo"): ProjectInternal {
+        val project = ProjectBuilder.builder().build() as ProjectInternal
+        project.group = group
+        project.plugins.apply(JavaPlugin::class.java)
+        project.plugins.apply(JooqCodegenPlugin::class.java)
+        return project
+    }
+
+    /** Reads back the merged configuration the plugin marshalled into the registered task. */
+    private fun resolvedConfiguration(project: ProjectInternal): Configuration {
+        val task = project.tasks.named("jooqCodegen", JooqCodegenTask::class.java).get()
+        return MiniJAXB.unmarshal(task.configurationXml.get(), Configuration::class.java)
+    }
+
+    /** Drops an empty, randomly named class file into the jooq source set's classes dir and returns it. */
+    private fun marker(project: ProjectInternal): File {
+        val classes = project.extensions.getByType(SourceSetContainer::class.java)
+            .getByName("jooq").output.classesDirs.first()
+        classes.mkdirs()
+        return File(classes, "${UUID.randomUUID()}.class").also { it.createNewFile() }
+    }
+
+    @Test
+    fun `plugin registers the demaJooq extension`() {
+        val project = project()
+        assertThat(project.extensions.findByName(JooqCodegenExtension.NAME)).isNotNull()
+    }
+
+    @Test
+    fun `plugin injects the jooq runtime dependency`() {
+        val project = project()
+        project.evaluate()
+
+        val jooqDep = project.configurations.getByName("implementation").dependencies
+            .find { it.group == "org.jooq" && it.name == "jooq" }
+        assertThat(jooqDep).isNotNull()
+    }
+
+    @Test
+    fun `plugin injects the jooqCodegen classpath dependency`() {
+        val project = project()
+        project.evaluate()
+
+        val tcDep = project.configurations.getByName("jooqCodegen").dependencies
+            .find { it.name == "jooq-liquibase-testcontainer" }
+        assertThat(tcDep).isNotNull()
+    }
+
+    @Test
+    fun `plugin injects the generator of jooqVersion into the codegen classpath`() {
+        val project = project()
+        project.extensions.getByType(JooqCodegenExtension::class.java).jooqVersion.set("3.21.7")
+        project.evaluate()
+
+        val generator = project.configurations.getByName("jooqCodegen").dependencies
+            .find { it.group == "org.jooq" && it.name == "jooq-codegen" }
+        assertThat(generator?.version, "codegen classpath carries a generator of another version than jooqVersion").isEqualTo("3.21.7")
+    }
+
+    @Test
+    fun `disabled plugin injects nothing`() {
+        val project = project()
+        project.extensions.getByType(JooqCodegenExtension::class.java).enabled.set(false)
+        project.evaluate()
+
+        assertAll {
+            assertThat(
+                project.configurations.getByName("implementation").dependencies
+                    .find { it.group == "org.jooq" && it.name == "jooq" },
+            ).isNull()
+            assertThat(
+                project.configurations.getByName("jooqCodegen").dependencies
+                    .find { it.name == "jooq-liquibase-testcontainer" },
+            ).isNull()
+            assertThat(project.tasks.findByName("jooqCodegen")).isNull()
+        }
+    }
+
+    @Test
+    fun `plugin applies dema defaults and layers the consumer override`() {
+        val project = project()
+        val ext = project.extensions.getByType(JooqCodegenExtension::class.java)
+        ext.databaseImage.set("postgresql:16-alpine")
+        // object: Action is required here — a trailing lambda is ambiguous with the Gradle
+        // Kotlin DSL Action() factory function in test scope.
+        val dbAction = object : Action<DatabaseExtension> {
+            override fun execute(db: DatabaseExtension) {
+                db.includes = "custom_.*"
+            }
+        }
+        val genAction = object : Action<GeneratorExtension> {
+            override fun execute(gen: GeneratorExtension) {
+                gen.database(dbAction)
+            }
+        }
+        val cfgAction = object : Action<ConfigurationExtension> {
+            override fun execute(config: ConfigurationExtension) {
+                config.generator(genAction)
+            }
+        }
+        ext.configuration(cfgAction)
+        project.evaluate()
+
+        val config = resolvedConfiguration(project)
+        assertAll {
+            assertThat(config.jdbc.url).isEqualTo(
+                "jdbc:tc:liquibasepostgres:16-alpine:///test-db?changelog=" +
+                    project.layout.projectDirectory.file("src/main/resources/liquibase/changelog-master.yml").asFile.absolutePath,
+            )
+            assertThat(config.generator.database.includes).isEqualTo("custom_.*")
+            assertThat(config.generator.generate.nullableAnnotationType)
+                .isEqualTo("org.jetbrains.annotations.Nullable")
+        }
+    }
+
+    @Test
+    fun `generated classes carry the jooq generated annotation`() {
+        val project = project()
+        project.evaluate()
+        assertThat(
+            resolvedConfiguration(project).generator.generate.generatedAnnotationType,
+            "generated jOOQ classes carry no bytecode-visible annotation and count against coverage",
+        ).isEqualTo(GeneratedAnnotationType.ORG_JOOQ_GENERATED)
+    }
+
+    @Test
+    fun `generated annotation is enabled`() {
+        val project = project()
+        project.evaluate()
+        assertThat(
+            resolvedConfiguration(project).generator.generate.isGeneratedAnnotation,
+            "the annotation type is set but the annotation itself is off",
+        ).isTrue()
+    }
+
+    @Test
+    fun `generated annotation carries no date`() {
+        val project = project()
+        project.evaluate()
+        assertThat(
+            resolvedConfiguration(project).generator.generate.isGeneratedAnnotationDate,
+            "a date in the annotation makes every codegen run produce different sources",
+        ).isFalse()
+    }
+
+    @Test
+    fun `consumer changelogFile overrides the default changelog path`() {
+        val project = project()
+        val changelog = project.layout.projectDirectory.file("db/custom-changelog.yml")
+        project.extensions.getByType(JooqCodegenExtension::class.java).changelogFile.set(changelog)
+        project.evaluate()
+
+        assertThat(resolvedConfiguration(project).jdbc.url).endsWith("?changelog=${changelog.asFile.absolutePath}")
+    }
+
+    @Test
+    fun `codegen task tracks the changelog as an input file`() {
+        val project = project()
+        project.evaluate()
+
+        val task = project.tasks.named("jooqCodegen", JooqCodegenTask::class.java).get()
+        val changelog = project.layout.projectDirectory
+            .file("src/main/resources/liquibase/changelog-master.yml").asFile
+        assertThat(task.inputs.files.contains(changelog)).isTrue()
+    }
+
+    @Test
+    fun `creates the jooq source set and leaves main untouched`() {
+        val project = project()
+        project.evaluate()
+
+        val sourceSets = project.extensions.getByType(SourceSetContainer::class.java)
+        val generatedDir = project.layout.buildDirectory.dir("generated/sources/jooq").get().asFile
+
+        assertAll {
+            assertThat(sourceSets.findByName("jooq")).isNotNull()
+            assertThat(sourceSets.getByName("jooq").java.srcDirs.contains(generatedDir)).isTrue()
+            assertThat(sourceSets.getByName("main").java.srcDirs.contains(generatedDir)).isFalse()
+        }
+    }
+
+    @Test
+    fun `plain jar packs the generated classes`() {
+        val project = project()
+        project.evaluate()
+        val marker = marker(project)
+        val jar = project.tasks.named("jar", Jar::class.java).get()
+        assertThat(jar.source.files, "plain jar dropped the generated jOOQ classes").contains(marker)
+    }
+
+    @Test
+    fun `other jar tasks dont pack the generated classes`() {
+        val project = project()
+        project.tasks.register("bootJar", Jar::class.java)
+        project.evaluate()
+        val marker = marker(project)
+        val jar = project.tasks.named("bootJar", Jar::class.java).get()
+        assertThat(jar.source.files, "bootJar duplicated the generated jOOQ classes at its root")
+            .doesNotContain(marker)
+    }
+
+    @Test
+    fun `compile tasks depend on jooqCodegen`() {
+        val project = project()
+        // The jooq-codegen module does not have the Kotlin plugin on its test classpath,
+        // so register a stand-in task named `compileKotlin` instead of applying it.
+        project.tasks.register("compileKotlin")
+        project.evaluate()
+
+        val compileKotlin = project.tasks.getByName("compileKotlin")
+        val compileJooqJava = project.tasks.getByName("compileJooqJava")
+        assertAll {
+            assertThat(
+                compileKotlin.taskDependencies.getDependencies(compileKotlin)
+                    .any { it.name == "jooqCodegen" },
+            ).isTrue()
+            assertThat(
+                compileJooqJava.taskDependencies.getDependencies(compileJooqJava)
+                    .any { it.name == "jooqCodegen" },
+            ).isTrue()
+        }
+    }
+}
