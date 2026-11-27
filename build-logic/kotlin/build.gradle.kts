@@ -1,3 +1,5 @@
+import org.gradle.plugin.compatibility.compatibility
+
 plugins {
     alias(libs.plugins.buildconfig)
 }
@@ -6,7 +8,7 @@ val javaVersion = libs.versions.java.get()
 
 buildConfig {
     className("VersionCatalog")
-    packageName("io.github.denismarkushin.gradle.kotlinlibrary")
+    packageName("org.demalab.gradle.kotlinlibrary")
     buildConfigField("JAVA_VERSION", javaVersion.toInt())
 }
 
@@ -23,7 +25,7 @@ internal fun plugin(provider: Provider<PluginDependency>) = with(provider.get())
 gradlePlugin {
     plugins {
         create("kotlin-conventions") {
-            id = "io.github.denis-markushin.kotlin"
+            id = "org.demalab.kotlin"
             displayName = "Kotlin Convention Plugin"
             description = """
                 Opinionated convention plugin that applies and configures the Kotlin JVM toolchain,
@@ -31,7 +33,7 @@ gradlePlugin {
                 javaParameters, and standard repositories (mavenLocal, mavenCentral).
                 Used as a shared foundation by kotlin-library and spring-service convention plugins.
             """.trimIndent()
-            implementationClass = "io.github.denismarkushin.gradle.KotlinPlugin"
+            implementationClass = "org.demalab.gradle.KotlinPlugin"
             tags.set(
                 listOf(
                     "kotlin",
@@ -40,6 +42,11 @@ gradlePlugin {
                     "compiler-options",
                 ),
             )
+            compatibility {
+                features {
+                    configurationCache = false
+                }
+            }
         }
     }
 }

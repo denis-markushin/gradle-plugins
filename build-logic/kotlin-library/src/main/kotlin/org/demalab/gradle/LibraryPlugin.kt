@@ -1,0 +1,18 @@
+package org.demalab.gradle
+
+import org.demalab.gradle.configurator.configurePublishing
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.api.plugins.JavaLibraryPlugin
+import org.gradle.kotlin.dsl.apply
+
+class LibraryPlugin : Plugin<Project> {
+
+    override fun apply(target: Project): Unit = with(target) {
+        plugins.apply(KotlinPlugin::class)
+        plugins.apply(JavaLibraryPlugin::class)
+        plugins.apply("org.jetbrains.kotlin.plugin.spring")
+
+        configurePublishing()
+    }
+}

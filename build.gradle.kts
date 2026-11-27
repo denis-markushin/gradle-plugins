@@ -1,5 +1,5 @@
 plugins {
-    id("io.github.denis-markushin.spotless")
+    id("org.demalab.spotless")
 }
 
 spotless {

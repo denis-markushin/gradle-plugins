@@ -16,7 +16,7 @@ about: Report a plugin that breaks or misconfigures a build
 <!-- A minimal build script or repository that shows the problem. -->
 
 ## Environment
-- Plugin ID and version: <!-- e.g. io.github.denis-markushin.spring-service 1.5.0 -->
+- Plugin ID and version: <!-- e.g. org.demalab.spring-service 2.0.0 -->
 - Gradle version: <!-- e.g. 9.1.0 -->
 - JDK running the Gradle daemon: <!-- e.g. Temurin 25 -->
 - OS: <!-- e.g. Ubuntu 24.04 -->

@@ -1,7 +1,7 @@
 # spring-service
 
 [![Build](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml/badge.svg)](https://github.com/denis-markushin/gradle-plugins/actions/workflows/gradle-ci.yml)
-[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/io.github.denis-markushin.spring-service?label=spring-service)](https://plugins.gradle.org/plugin/io.github.denis-markushin.spring-service)
+[![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/org.demalab.spring-service?label=spring-service)](https://plugins.gradle.org/plugin/org.demalab.spring-service)
 
 - [What it configures](#what-it-configures)
 - [Installation](#installation)
@@ -18,15 +18,15 @@ of plugins and dependencies that would otherwise require boilerplate configurati
 
 | Area                   | Details                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 |------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Kotlin baseline**    | JVM toolchain, compiler args, and repositories are inherited from [`io.github.denis-markushin.kotlin`](../kotlin/README.md) (applied automatically)                                                                                                                                                                                                                                                                                                                                                                                            |
+| **Kotlin baseline**    | JVM toolchain, compiler args, and repositories are inherited from [`org.demalab.kotlin`](../kotlin/README.md) (applied automatically)                                                                                                                                                                                                                                                                                                                                                                                                          |
 | **Spring Boot**        | `spring-boot` + `kotlin.plugin.spring` applied; Spring Boot BOM imported into all dependency configurations; `spring-boot-devtools` and `spring-boot-docker-compose` added to `developmentOnly`                                                                                                                                                                                                                                                                                                                                                |
 | **Build info**         | `spring-boot-gradle-plugin` build info task configured so `management.info.build.*` is populated at runtime                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | **Resource filtering** | `processResources` substitutes `@project.*@` tokens from `rootProject.properties` into `*.yml`, `*.yaml`, and `*.properties` files                                                                                                                                                                                                                                                                                                                                                                                             |
 | **Testing**            | JUnit Platform enabled; every test and lifecycle method fails after 5 minutes unless a debugger is attached (see [Test timeout](#test-timeout)); `spring-boot-test`, `assertk`, `spring-mockk`, `kotest`, `awaitility` added; Mockito excluded globally                                                                                                                                                                                                                                                                                        |
-| **Coverage**           | Kover on `check`: XML in JaCoCo schema at `build/reports/kover/report.xml` and `application line coverage: NN%` in the log, generated code excluded — inherited from [`io.github.denis-markushin.kotlin`](../kotlin/README.md#coverage), which shows the GitLab job keywords |
+| **Coverage**           | Kover on `check`: XML in JaCoCo schema at `build/reports/kover/report.xml` and `application line coverage: NN%` in the log, generated code excluded — inherited from [`org.demalab.kotlin`](../kotlin/README.md#coverage), which shows the GitLab job keywords               |
 | **MapStruct**          | Optional — enabled via `platform.useMapstruct = true`; adds `mapstruct-core`, `mapstruct-spring-annotations`, and kapt processors with Spring component model                                                                                                                                                                                                                                                                                                                                                                                  |
-| **Netflix DGS**        | Optional — enabled via `platform.spring.netflixDgs.useNetflixDgs = true`; imports DGS BOM, applies `com.netflix.dgs.codegen`, configures `GenerateJavaTask`, and auto-wires `graphql-dgs-starter` + `common-scalars-starter` into the `dgsCodegen` configuration so shared schema types (PageInfo, Node, MutationResult, scalars) are visible to codegen. `dgsCodegen` resolves consistently with `runtimeClasspath` and the starters are added without a version, so codegen reads the schema of the starter version the service declares at runtime (`dema.bundles.graphql`); a service that enables DGS without declaring the starter fails at `dgsCodegen` resolution. Default `typeMapping` maps every scalar the two starters declare (`UUID`, `BigDecimal`, `Long`, `Date`, `LocalDateTime`, `Base64`, `Email`, `Phone`) to its Kotlin type, since codegen resolves most unmapped scalars to a class of that name in the service's `types` package; it also redirects the starter's `ErrorInterface` hierarchy to `org.dema.graphql.dgs.error.*`, so consumers get error-type codegen without duplicating the mapping. |
-| **jOOQ codegen**       | Enabled by default; applies [`io.github.denis-markushin.jooq-codegen`](../jooq-codegen-gradle-plugin/README.md) and mirrors the `platform { jooq { } }` block into it; adds `spring-boot-starter-liquibase`, which Spring Boot 4 needs to run the migrations. Codegen reads `src/main/resources/liquibase/changelog-master.yml` while Spring Boot looks for `db/changelog/db.changelog-master.yaml`, so set `spring.liquibase.change-log: classpath:liquibase/changelog-master.yml`; a service that migrates elsewhere sets `spring.liquibase.enabled: false`. Disable both via `platform.useJooq = false` |
+| **Netflix DGS**        | Optional — enabled via `platform.spring.netflixDgs.useNetflixDgs = true`; imports DGS BOM, applies `com.netflix.dgs.codegen`, configures `GenerateJavaTask`, and auto-wires `graphql-dgs-starter` + `common-scalars-starter` into the `dgsCodegen` configuration so shared schema types (PageInfo, Node, MutationResult, scalars) are visible to codegen. `dgsCodegen` resolves consistently with `runtimeClasspath` and the starters are added without a version, so codegen reads the schema of the starter version the service declares at runtime (`dema.bundles.graphql`); a service that enables DGS without declaring the starter fails at `dgsCodegen` resolution. Default `typeMapping` maps every scalar the two starters declare (`UUID`, `BigDecimal`, `Long`, `Date`, `LocalDateTime`, `Base64`, `Email`, `Phone`) to its Kotlin type, since codegen resolves most unmapped scalars to a class of that name in the service's `types` package; it also redirects the starter's `ErrorInterface` hierarchy to `org.demalab.graphql.dgs.error.*`, so consumers get error-type codegen without duplicating the mapping. |
+| **jOOQ codegen**       | Enabled by default; applies [`org.demalab.jooq-codegen`](../jooq-codegen-gradle-plugin/README.md) and mirrors the `platform { jooq { } }` block into it; adds `spring-boot-starter-liquibase`, which Spring Boot 4 needs to run the migrations. Codegen reads `src/main/resources/liquibase/changelog-master.yml` while Spring Boot looks for `db/changelog/db.changelog-master.yaml`, so set `spring.liquibase.change-log: classpath:liquibase/changelog-master.yml`; a service that migrates elsewhere sets `spring.liquibase.enabled: false`. Disable both via `platform.useJooq = false`               |
 | **jcabi-aspects**      | Optional — enabled by default; can be disabled via `platform.useJcabi = false`                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | **Spotless**           | ktlint applied to all `*.kt` and `*.gradle.kts` sources; `.editorconfig` and `.gitattributes` bootstrapped into the root project if absent; pre-push Git hook installed                                                                                                                                                                                                                                                                                                                                                                        |
 | **Versioning**         | [Vercraft](https://github.com/akuleshov7/vercraft) plugin applied for semantic versioning from Git tags. Unless `defaultMainBranch` is set, the plugin hands Vercraft `CI_DEFAULT_BRANCH` when CI sets it, otherwise `master` or `main`, whichever exists locally or on the remote before Vercraft's own fetch; a CI system that fetches only the pipeline ref and does not set `CI_DEFAULT_BRANCH` still needs `defaultMainBranch`. Vercraft is skipped and the version is `0.0.0-SNAPSHOT` outside a git repository, in a repository without commits, and on a detached HEAD whose branch neither the `checkOutBranch` property nor `CI_COMMIT_REF_NAME`, `GITHUB_HEAD_REF`, `BITBUCKET_BRANCH`, `VERCRAFT_BRANCH` names |
@@ -47,14 +47,14 @@ pluginManagement {
 ```kotlin
 // build.gradle.kts
 plugins {
-  id("io.github.denis-markushin.spring-service") version "x.x.x"
+  id("org.demalab.spring-service") version "x.x.x"
 }
 ```
 
 ```groovy
 // build.gradle
 plugins {
-  id 'io.github.denis-markushin.spring-service' version 'x.x.x'
+  id 'org.demalab.spring-service' version 'x.x.x'
 }
 ```
 
@@ -115,14 +115,14 @@ platform {
           "Generated" to "jakarta.annotation.Generated",
           "Upload" to "org.springframework.web.multipart.MultipartFile",
           // graphql-dgs-starter ErrorInterface hierarchy — seeded by default
-          "ErrorInterface" to "org.dema.graphql.dgs.error.ErrorInterface",
-          "NotFoundError" to "org.dema.graphql.dgs.error.NotFoundError",
-          "ValidationError" to "org.dema.graphql.dgs.error.ValidationError",
-          "ConflictError" to "org.dema.graphql.dgs.error.ConflictError",
-          "UnauthorizedError" to "org.dema.graphql.dgs.error.UnauthorizedError",
-          "ForbiddenError" to "org.dema.graphql.dgs.error.ForbiddenError",
-          "ServiceUnavailableError" to "org.dema.graphql.dgs.error.ServiceUnavailableError",
-          "RuntimeError" to "org.dema.graphql.dgs.error.RuntimeError",
+          "ErrorInterface" to "org.demalab.graphql.dgs.error.ErrorInterface",
+          "NotFoundError" to "org.demalab.graphql.dgs.error.NotFoundError",
+          "ValidationError" to "org.demalab.graphql.dgs.error.ValidationError",
+          "ConflictError" to "org.demalab.graphql.dgs.error.ConflictError",
+          "UnauthorizedError" to "org.demalab.graphql.dgs.error.UnauthorizedError",
+          "ForbiddenError" to "org.demalab.graphql.dgs.error.ForbiddenError",
+          "ServiceUnavailableError" to "org.demalab.graphql.dgs.error.ServiceUnavailableError",
+          "RuntimeError" to "org.demalab.graphql.dgs.error.RuntimeError",
         )
       }
     }
